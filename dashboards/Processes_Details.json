@@ -8,10 +8,12 @@
                 "hide": false,
                 "iconColor": "#e0752d",
                 "limit": 100,
+                "matchAny": true,
                 "name": "PMM Annotations",
                 "showIn": 0,
                 "tags": [
-                    "pmm_annotation"
+                    "pmm_annotation",
+                    "$node_name"
                 ],
                 "type": "tags"
             },
@@ -33,7 +35,7 @@
     "gnetId": null,
     "graphTooltip": 1,
     "id": null,
-    "iteration": 1576524151406,
+    "iteration": 1581509182856,
     "links": [
         {
             "icon": "doc",
@@ -95,7 +97,7 @@
         },
         {
             "asDropdown": true,
-            "includeVars": true,
+            "includeVars": false,
             "keepTime": true,
             "tags": [
                 "PMM"
@@ -154,7 +156,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -204,7 +206,7 @@
                     "calculatedInterval": "2s",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "max_over_time(node_processes_pids{node_name=~\"$node_name\"}[$interval]) or max_over_time(node_processes_pids{node_name=~\"$node_name\"}[5m]) or\ncount by (node_name) (max_over_time(rdsosmetrics_processList_cpuUsedPc{node_name=~\"$node_name\"}[$interval]) or max_over_time(rdsosmetrics_processList_cpuUsedPc{node_name=~\"$node_name\"}[5m]))",
+                    "expr": "avg by (node_name) (max_over_time(node_processes_pids{node_name=~\"$node_name\"}[$interval]) or max_over_time(node_processes_pids{node_name=~\"$node_name\"}[5m]) or\ncount by (node_name) (max_over_time(rdsosmetrics_processList_cpuUsedPc{node_name=~\"$node_name\"}[$interval]) or max_over_time(rdsosmetrics_processList_cpuUsedPc{node_name=~\"$node_name\"}[5m])))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -223,7 +225,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -262,7 +264,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -312,7 +314,7 @@
                     "calculatedInterval": "2s",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(max_over_time(node_processes_pids{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_pids{node_name=~\"$node_name\"}[5m]))/\n(max_over_time(node_processes_max_processes{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_max_processes{node_name=~\"$node_name\"}[5m]))",
+                    "expr": "avg by (node_name) ((max_over_time(node_processes_pids{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_pids{node_name=~\"$node_name\"}[5m]))/\n(max_over_time(node_processes_max_processes{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_max_processes{node_name=~\"$node_name\"}[5m])))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -331,7 +333,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -370,7 +372,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -427,7 +429,7 @@
                     "calculatedInterval": "2s",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "max_over_time(node_processes_threads{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_threads{node_name=~\"$node_name\"}[5m]) or\ncount by (node_name) (count by (id,node_name)(max_over_time(rdsosmetrics_processList_rss{node_name=~\"$node_name\"}[$interval]) or\nmax_over_time(rdsosmetrics_processList_rss{node_name=~\"$node_name\"}[5m]))) ",
+                    "expr": "avg by (node_name) (max_over_time(node_processes_threads{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_threads{node_name=~\"$node_name\"}[5m]) or\ncount by (node_name) (count by (id,node_name)(max_over_time(rdsosmetrics_processList_rss{node_name=~\"$node_name\"}[$interval]) or\nmax_over_time(rdsosmetrics_processList_rss{node_name=~\"$node_name\"}[5m])))) ",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -446,7 +448,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -485,7 +487,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -546,7 +548,7 @@
                     "calculatedInterval": "2s",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(max_over_time(node_processes_threads{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_threads{node_name=~\"$node_name\"}[$interval]))/\n(max_over_time(node_processes_max_threads{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_max_threads{node_name=~\"$node_name\"}[5m]))",
+                    "expr": "avg by (node_name) ((max_over_time(node_processes_threads{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_threads{node_name=~\"$node_name\"}[$interval]))/\n(max_over_time(node_processes_max_threads{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_max_threads{node_name=~\"$node_name\"}[5m])))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -565,7 +567,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -604,7 +606,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "**Processes**\n\nThe Processes graph shows how many processes/threads are either in the kernel run queue (runnable state) or in the blocked queue (waiting for I/O).  When the number of process in the runnable state is constantly higher than the number of CPU cores available, the load is CPU bound.  When the number of process blocked waiting for I/O is large, the load is disk bound.  The running average of the sum of these two quantities is the basis of the loadavg metric.",
             "editable": true,
@@ -668,7 +670,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "max_over_time(node_procs_running{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_procs_running{node_name=~\"$node_name\"}[5m])",
+                    "expr": "avg by (node_name) (max_over_time(node_procs_running{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_procs_running{node_name=~\"$node_name\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -695,7 +697,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -734,7 +736,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "**Processes**\n\nThe Processes graph shows how many processes/threads are either in the kernel run queue (runnable state) or in the blocked queue (waiting for I/O).  When the number of process in the runnable state is constantly higher than the number of CPU cores available, the load is CPU bound.  When the number of process blocked waiting for I/O is large, the load is disk bound.  The running average of the sum of these two quantities is the basis of the loadavg metric.",
             "editable": true,
@@ -798,7 +800,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "max_over_time(node_procs_blocked{node_name=~\"$node_name\",node_type!~\"remote_rds\"}[$interval]) or max_over_time(node_procs_blocked{node_name=~\"$node_name\",node_type!~\"remote_rds\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_blocked{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_blocked{node_name=~\"$node_name\"}[5m])\n",
+                    "expr": "avg by (node_name) (max_over_time(node_procs_blocked{node_name=~\"$node_name\",node_type!~\"remote_rds\"}[$interval]) or max_over_time(node_procs_blocked{node_name=~\"$node_name\",node_type!~\"remote_rds\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_blocked{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_blocked{node_name=~\"$node_name\"}[5m]))\n",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -825,7 +827,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -864,7 +866,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -923,7 +925,7 @@
                     "calculatedInterval": "2s",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"S\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"S\"}[5m]) or \nmax_over_time(rdsosmetrics_tasks_sleeping{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_sleeping{node_name=~\"$node_name\"}[5m])",
+                    "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"S\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"S\"}[5m]) or \nmax_over_time(rdsosmetrics_tasks_sleeping{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_sleeping{node_name=~\"$node_name\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -950,7 +952,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -989,7 +991,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -1045,7 +1047,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"R\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"R\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_running{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_running{node_name=~\"$node_name\"}[5m])",
+                    "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"R\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"R\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_running{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_running{node_name=~\"$node_name\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1069,7 +1071,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1108,7 +1110,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -1164,7 +1166,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"D\"}[$interval]) or max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"D\"}[5m])",
+                    "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"D\"}[$interval]) or max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"D\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1188,7 +1190,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1227,7 +1229,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "",
             "editable": true,
@@ -1290,7 +1292,7 @@
                     "refId": "D"
                 },
                 {
-                    "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"T\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"T\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_stopped{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_stopped{node_name=~\"$node_name\"}[5m])",
+                    "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"T\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"T\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_stopped{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_stopped{node_name=~\"$node_name\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1306,7 +1308,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1345,7 +1347,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -1401,7 +1403,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"Z\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"Z\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_zombie{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_zombie{node_name=~\"$node_name\"}[5m])",
+                    "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"Z\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"Z\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_zombie{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_zombie{node_name=~\"$node_name\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1425,7 +1427,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1464,7 +1466,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "editable": true,
@@ -1521,7 +1523,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"X\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"X\"}[5m])",
+                    "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"X\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"X\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1545,7 +1547,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1595,7 +1597,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "**Processes**\n\nThe Processes graph shows how many processes/threads are either in the kernel run queue (runnable state) or in the blocked queue (waiting for I/O).  When the number of process in the runnable state is constantly higher than the number of CPU cores available, the load is CPU bound.  When the number of process blocked waiting for I/O is large, the load is disk bound.  The running average of the sum of these two quantities is the basis of the loadavg metric.",
                     "editable": true,
@@ -1659,7 +1661,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "node_procs_running{node_name=~\"$node_name\"}",
+                            "expr": "avg by (node_name) (node_procs_running{node_name=~\"$node_name\"})",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1673,7 +1675,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "node_procs_blocked{node_name=~\"$node_name\"}",
+                            "expr": "avg by (node_name) (node_procs_blocked{node_name=~\"$node_name\"})",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1692,7 +1694,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -1731,7 +1733,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -1781,7 +1783,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"S\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"S\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_sleeping{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_sleeping{node_name=~\"$node_name\"}[5m])",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"S\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"S\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_sleeping{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_sleeping{node_name=~\"$node_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1792,7 +1794,7 @@
                             "target": ""
                         },
                         {
-                            "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"R\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"R\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_running{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_running{node_name=~\"$node_name\"}[5m])",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"R\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"R\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_running{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_running{node_name=~\"$node_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1800,7 +1802,7 @@
                             "refId": "A"
                         },
                         {
-                            "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"D\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"D\"}[5m])",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"D\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"D\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1808,7 +1810,7 @@
                             "refId": "C"
                         },
                         {
-                            "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"T\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"T\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_stopped{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_stopped{node_name=~\"$node_name\"}[5m])",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"T\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"T\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_stopped{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_stopped{node_name=~\"$node_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1816,7 +1818,7 @@
                             "refId": "D"
                         },
                         {
-                            "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"Z\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"Z\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_zombie{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_zombie{node_name=~\"$node_name\"}[5m])",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"Z\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"Z\"}[5m]) or\nmax_over_time(rdsosmetrics_tasks_zombie{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(rdsosmetrics_tasks_zombie{node_name=~\"$node_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1824,7 +1826,7 @@
                             "refId": "E"
                         },
                         {
-                            "expr": "max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"X\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"X\"}[5m])",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_state{node_name=~\"$node_name\",state=\"X\"}[$interval]) or \nmax_over_time(node_processes_state{node_name=~\"$node_name\",state=\"X\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1840,7 +1842,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -1879,7 +1881,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -1936,7 +1938,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max_over_time(node_processes_pids{node_name=~\"$node_name\"}[$interval]) or max_over_time(node_processes_pids{node_name=~\"$node_name\"}[5m]) or\ncount by (node_name) (max_over_time(rdsosmetrics_processList_cpuUsedPc{node_name=~\"$node_name\"}[$interval]) or max_over_time(rdsosmetrics_processList_cpuUsedPc{node_name=~\"$node_name\"}[5m]))",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_pids{node_name=~\"$node_name\"}[$interval]) or max_over_time(node_processes_pids{node_name=~\"$node_name\"}[5m]) or\ncount by (node_name) (max_over_time(rdsosmetrics_processList_cpuUsedPc{node_name=~\"$node_name\"}[$interval]) or max_over_time(rdsosmetrics_processList_cpuUsedPc{node_name=~\"$node_name\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1947,7 +1949,7 @@
                             "target": ""
                         },
                         {
-                            "expr": "max_over_time(node_processes_max_processes{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_max_processes{node_name=\"$node_name\"}[5m])",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_max_processes{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_max_processes{node_name=\"$node_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1963,7 +1965,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2002,7 +2004,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -2063,7 +2065,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "(max_over_time(node_processes_pids{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_pids{node_name=\"$node_name\"}[5m])) /\n(max_over_time(node_processes_max_processes{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_max_processes{node_name=\"$node_name\"}[5m]))",
+                            "expr": "avg by (node_name) ((max_over_time(node_processes_pids{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_pids{node_name=\"$node_name\"}[5m])) /\n(max_over_time(node_processes_max_processes{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_max_processes{node_name=\"$node_name\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2082,7 +2084,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2121,7 +2123,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -2178,7 +2180,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max_over_time(node_processes_threads{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_threads{node_name=~\"$node_name\"}[5m]) or\ncount by (node_name) (count by (id,node_name)(max_over_time(rdsosmetrics_processList_rss{node_name=~\"$node_name\"}[$interval]) or\nmax_over_time(rdsosmetrics_processList_rss{node_name=~\"$node_name\"}[5m]))) ",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_threads{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(node_processes_threads{node_name=~\"$node_name\"}[5m]) or\ncount by (node_name) (count by (id,node_name)(max_over_time(rdsosmetrics_processList_rss{node_name=~\"$node_name\"}[$interval]) or\nmax_over_time(rdsosmetrics_processList_rss{node_name=~\"$node_name\"}[5m])))) ",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2189,7 +2191,7 @@
                             "target": ""
                         },
                         {
-                            "expr": "max_over_time(node_processes_max_threads{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_max_threads{node_name=\"$node_name\"}[5m])",
+                            "expr": "avg by (node_name) (max_over_time(node_processes_max_threads{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_max_threads{node_name=\"$node_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2205,7 +2207,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2244,7 +2246,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -2305,7 +2307,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "(max_over_time(node_processes_threads{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_threads{node_name=\"$node_name\"}[5m])) /\n(max_over_time(node_processes_max_threads{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_max_threads{node_name=\"$node_name\"}[5m]))",
+                            "expr": "avg by (node_name) ((max_over_time(node_processes_threads{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_threads{node_name=\"$node_name\"}[5m])) /\n(max_over_time(node_processes_max_threads{node_name=\"$node_name\"}[$interval]) or max_over_time(node_processes_max_threads{node_name=\"$node_name\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2324,7 +2326,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2379,7 +2381,7 @@
                 "auto_count": 200,
                 "auto_min": "1s",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "hide": 0,
                 "includeAll": false,
                 "label": "Interval",
@@ -2437,7 +2439,7 @@
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"node_load1|process_start_time_seconds\"},node_name)",
                 "hide": 0,
                 "includeAll": true,
@@ -2451,7 +2453,7 @@
                 "refresh_on_load": false,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": "instance",
                 "tags": [],
                 "tagsQuery": "up",
@@ -2461,7 +2463,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_name)",
                 "hide": 2,
                 "includeAll": true,
@@ -2473,7 +2475,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2483,7 +2485,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
                 "hide": 2,
                 "includeAll": true,
@@ -2495,7 +2497,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2505,7 +2507,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, cluster)",
                 "hide": 2,
                 "includeAll": true,
@@ -2517,7 +2519,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2527,7 +2529,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
                 "hide": 2,
                 "includeAll": true,
@@ -2539,7 +2541,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2549,7 +2551,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
                 "hide": 2,
                 "includeAll": true,
@@ -2558,10 +2560,10 @@
                 "name": "database",
                 "options": [],
                 "query": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2571,7 +2573,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
                 "hide": 2,
                 "includeAll": true,
@@ -2580,10 +2582,10 @@
                 "name": "node_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2593,7 +2595,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
                 "hide": 2,
                 "includeAll": true,
@@ -2602,10 +2604,55 @@
                 "name": "service_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "hide": 2,
+                "includeAll": true,
+                "index": -1,
+                "label": "Username",
+                "multi": true,
+                "name": "username",
+                "options": [],
+                "query": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "hide": 2,
+                "includeAll": true,
+                "label": "Schema",
+                "multi": true,
+                "name": "schema",
+                "options": [],
+                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",

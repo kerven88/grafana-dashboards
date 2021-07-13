@@ -12,9 +12,7 @@
                 "name": "PMM Annotations",
                 "showIn": 0,
                 "tags": [
-                    "pmm_annotation",
-                    "$node_name",
-                    "$service_name"
+                    "pmm_annotation"
                 ],
                 "type": "tags"
             },
@@ -63,6 +61,18 @@
             "url": "/graph/d/pmm-qan/pmm-query-analytics"
         },
         {
+            "icon": "bolt",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+                "Compare"
+            ],
+            "targetBlank": false,
+            "title": "Compare",
+            "type": "link",
+            "url": "/graph/d/pxc-nodes-compare/pxc-galera-nodes-compare"
+        },
+        {
             "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
@@ -97,7 +107,7 @@
         },
         {
             "asDropdown": true,
-            "includeVars": true,
+            "includeVars": false,
             "keepTime": true,
             "tags": [
                 "PMM"
@@ -121,7 +131,6 @@
             "id": 999,
             "isRootDashboard": false,
             "links": [],
-            "options": {},
             "targets": [
                 {
                     "expr": "",
@@ -141,7 +150,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "editable": true,
             "error": false,
@@ -154,6 +163,7 @@
                 "x": 0,
                 "y": 2
             },
+            "hiddenSeries": false,
             "id": 42,
             "legend": {
                 "alignAsTable": true,
@@ -163,6 +173,8 @@
                 "min": true,
                 "rightSide": true,
                 "show": false,
+                "sort": "avg",
+                "sortDesc": true,
                 "total": false,
                 "values": true
             },
@@ -191,7 +203,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "min((min_over_time(mysql_global_status_wsrep_cluster_size[$interval]) or min_over_time(mysql_global_status_wsrep_cluster_size[5m])) * \non (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
+                    "expr": "(min_over_time(mysql_global_status_wsrep_cluster_size[$interval]) or min_over_time(mysql_global_status_wsrep_cluster_size[5m])) * \non (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -210,7 +222,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "cumulative"
             },
             "transparent": true,
@@ -250,7 +262,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -263,6 +275,7 @@
                 "x": 0,
                 "y": 6
             },
+            "hiddenSeries": false,
             "id": 52,
             "legend": {
                 "alignAsTable": true,
@@ -296,7 +309,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "clamp_max((rate(mysql_global_status_wsrep_flow_control_paused_ns[$interval]) or irate(mysql_global_status_wsrep_flow_control_paused_ns[5m]))/1000000000 * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"},1)",
+                    "expr": "clamp_max(avg by (service_name) ((rate(mysql_global_status_wsrep_flow_control_paused_ns[$interval]) or irate(mysql_global_status_wsrep_flow_control_paused_ns[5m])))/1000000000 * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}),1)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -314,7 +327,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "cumulative"
             },
             "type": "graph",
@@ -353,7 +366,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -366,6 +379,7 @@
                 "x": 12,
                 "y": 6
             },
+            "hiddenSeries": false,
             "id": 53,
             "legend": {
                 "alignAsTable": true,
@@ -399,7 +413,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(mysql_global_status_wsrep_flow_control_sent[$interval]) or irate(mysql_global_status_wsrep_flow_control_sent[5m])) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "(avg by (service_name) (rate(mysql_global_status_wsrep_flow_control_sent[$interval]) or irate(mysql_global_status_wsrep_flow_control_sent[5m]))) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -416,7 +430,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "cumulative"
             },
             "type": "graph",
@@ -454,7 +468,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -467,6 +481,7 @@
                 "x": 0,
                 "y": 13
             },
+            "hiddenSeries": false,
             "id": 9,
             "legend": {
                 "alignAsTable": true,
@@ -501,7 +516,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(mysql_global_status_wsrep_received_bytes[$interval]) or irate(mysql_global_status_wsrep_received_bytes[5m])) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_wsrep_received_bytes[$interval]) or irate(mysql_global_status_wsrep_received_bytes[5m]))) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -518,7 +533,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -556,7 +571,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -569,6 +584,7 @@
                 "x": 12,
                 "y": 13
             },
+            "hiddenSeries": false,
             "id": 47,
             "legend": {
                 "alignAsTable": true,
@@ -578,6 +594,8 @@
                 "min": true,
                 "rightSide": false,
                 "show": true,
+                "sort": "avg",
+                "sortDesc": true,
                 "total": false,
                 "values": true
             },
@@ -601,7 +619,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(mysql_global_status_wsrep_replicated_bytes[$interval]) or irate(mysql_global_status_wsrep_replicated_bytes[5m])) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_wsrep_replicated_bytes[$interval]) or irate(mysql_global_status_wsrep_replicated_bytes[5m]))) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -618,7 +636,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -656,7 +674,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -669,6 +687,7 @@
                 "x": 0,
                 "y": 20
             },
+            "hiddenSeries": false,
             "id": 48,
             "legend": {
                 "alignAsTable": true,
@@ -677,6 +696,8 @@
                 "max": true,
                 "min": true,
                 "show": true,
+                "sort": "avg",
+                "sortDesc": true,
                 "total": false,
                 "values": true
             },
@@ -700,7 +721,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "mysql_global_status_wsrep_local_recv_queue * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (mysql_global_status_wsrep_local_recv_queue) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -717,7 +738,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "cumulative"
             },
             "type": "graph",
@@ -755,7 +776,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -768,6 +789,7 @@
                 "x": 12,
                 "y": 20
             },
+            "hiddenSeries": false,
             "id": 49,
             "legend": {
                 "alignAsTable": true,
@@ -776,6 +798,8 @@
                 "max": true,
                 "min": true,
                 "show": true,
+                "sort": "avg",
+                "sortDesc": true,
                 "total": false,
                 "values": true
             },
@@ -799,7 +823,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "mysql_global_status_wsrep_local_send_queue * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (mysql_global_status_wsrep_local_send_queue) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -816,7 +840,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "cumulative"
             },
             "type": "graph",
@@ -854,7 +878,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -867,6 +891,7 @@
                 "x": 0,
                 "y": 27
             },
+            "hiddenSeries": false,
             "id": 2,
             "legend": {
                 "alignAsTable": true,
@@ -875,6 +900,8 @@
                 "max": true,
                 "min": true,
                 "show": true,
+                "sort": "avg",
+                "sortDesc": true,
                 "total": false,
                 "values": true
             },
@@ -898,7 +925,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(mysql_global_status_wsrep_received[$interval]) or irate(mysql_global_status_wsrep_received[5m])) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_wsrep_received[$interval]) or irate(mysql_global_status_wsrep_received[5m]))) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -915,7 +942,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "cumulative"
             },
             "type": "graph",
@@ -953,7 +980,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -966,6 +993,7 @@
                 "x": 12,
                 "y": 27
             },
+            "hiddenSeries": false,
             "id": 50,
             "legend": {
                 "alignAsTable": true,
@@ -974,6 +1002,8 @@
                 "max": true,
                 "min": true,
                 "show": true,
+                "sort": "avg",
+                "sortDesc": true,
                 "total": false,
                 "values": true
             },
@@ -997,7 +1027,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(mysql_global_status_wsrep_replicated[$interval]) or irate(mysql_global_status_wsrep_replicated[5m])) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_wsrep_replicated[$interval]) or irate(mysql_global_status_wsrep_replicated[5m]))) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -1014,7 +1044,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "cumulative"
             },
             "type": "graph",
@@ -1052,7 +1082,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -1065,6 +1095,7 @@
                 "x": 0,
                 "y": 34
             },
+            "hiddenSeries": false,
             "id": 11,
             "legend": {
                 "alignAsTable": true,
@@ -1099,7 +1130,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(mysql_global_status_wsrep_received_bytes[$interval]) / rate(mysql_global_status_wsrep_received[$interval]) or irate(mysql_global_status_wsrep_received_bytes[5m]) / irate(mysql_global_status_wsrep_received[5m])) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_wsrep_received_bytes[$interval]) / (rate(mysql_global_status_wsrep_received[$interval]) > 0) or irate(mysql_global_status_wsrep_received_bytes[5m]) / (irate(mysql_global_status_wsrep_received[5m]) > 0))) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -1116,7 +1147,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1154,7 +1185,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -1167,6 +1198,7 @@
                 "x": 12,
                 "y": 34
             },
+            "hiddenSeries": false,
             "id": 51,
             "legend": {
                 "alignAsTable": true,
@@ -1201,7 +1233,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(mysql_global_status_wsrep_replicated_bytes[$interval]) / rate(mysql_global_status_wsrep_replicated[$interval]) or irate(mysql_global_status_wsrep_replicated_bytes[5m]) / irate(mysql_global_status_wsrep_replicated[5m])) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_wsrep_replicated_bytes[$interval]) / (rate(mysql_global_status_wsrep_replicated[$interval]) > 0) or irate(mysql_global_status_wsrep_replicated_bytes[5m]) / (irate(mysql_global_status_wsrep_replicated[5m]) > 0))) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{ service_name }}",
@@ -1218,7 +1250,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1256,7 +1288,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "fill": 2,
             "fillGradient": 0,
@@ -1266,6 +1298,7 @@
                 "x": 0,
                 "y": 41
             },
+            "hiddenSeries": false,
             "id": 54,
             "legend": {
                 "alignAsTable": true,
@@ -1296,7 +1329,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "mysql_global_status_wsrep_flow_control_interval_low * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (mysql_global_status_wsrep_flow_control_interval_low) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1311,7 +1344,7 @@
             "title": "FC Trigger Low Limit",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1351,7 +1384,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "fill": 2,
             "fillGradient": 0,
@@ -1361,6 +1394,7 @@
                 "x": 12,
                 "y": 41
             },
+            "hiddenSeries": false,
             "id": 55,
             "legend": {
                 "alignAsTable": true,
@@ -1391,7 +1425,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "mysql_global_status_wsrep_flow_control_interval_high * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (mysql_global_status_wsrep_flow_control_interval_high) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1406,7 +1440,7 @@
             "title": "FC Trigger High Limit",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1446,7 +1480,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "fill": 2,
             "fillGradient": 0,
@@ -1456,6 +1490,7 @@
                 "x": 0,
                 "y": 48
             },
+            "hiddenSeries": false,
             "id": 56,
             "legend": {
                 "alignAsTable": true,
@@ -1487,7 +1522,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "mysql_global_status_wsrep_ist_receive_seqno_start * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (mysql_global_status_wsrep_ist_receive_seqno_start) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1495,7 +1530,7 @@
                     "refId": "A"
                 },
                 {
-                    "expr": "mysql_global_status_wsrep_ist_receive_seqno_current * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (mysql_global_status_wsrep_ist_receive_seqno_current) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "format": "time_series",
                     "hide": false,
                     "interval": "$interval",
@@ -1504,8 +1539,9 @@
                     "refId": "B"
                 },
                 {
-                    "expr": "mysql_global_status_wsrep_ist_receive_seqno_end * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (mysql_global_status_wsrep_ist_receive_seqno_end) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "format": "time_series",
+                    "hide": false,
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "{{service_name}} last",
@@ -1519,7 +1555,7 @@
             "title": "IST Progress",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1559,7 +1595,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "fill": 0,
             "fillGradient": 0,
@@ -1569,6 +1605,7 @@
                 "x": 0,
                 "y": 55
             },
+            "hiddenSeries": false,
             "id": 57,
             "legend": {
                 "alignAsTable": true,
@@ -1577,6 +1614,8 @@
                 "max": true,
                 "min": true,
                 "show": true,
+                "sort": "avg",
+                "sortDesc": true,
                 "total": false,
                 "values": true
             },
@@ -1598,15 +1637,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "(rate(mysql_global_status_wsrep_replicated_bytes[$interval]) / rate(mysql_global_status_wsrep_replicated[$interval]) or irate(mysql_global_status_wsrep_replicated_bytes[5m]) / irate(mysql_global_status_wsrep_replicated[5m])) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
-                    "format": "time_series",
-                    "hide": true,
-                    "intervalFactor": 2,
-                    "legendFormat": "{{service_name}}",
-                    "refId": "A"
-                },
-                {
-                    "expr": "avg_over_time(mysql_global_status_wsrep_evs_repl_latency{aggregator=\"Average\"}[$interval]) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (avg_over_time(mysql_global_status_wsrep_evs_repl_latency{aggregator=\"Average\"}[$interval])) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1621,7 +1652,7 @@
             "title": "Average Galera Replication Latency",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1661,7 +1692,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "fill": 1,
             "fillGradient": 0,
@@ -1671,6 +1702,7 @@
                 "x": 12,
                 "y": 55
             },
+            "hiddenSeries": false,
             "id": 58,
             "legend": {
                 "alignAsTable": true,
@@ -1679,6 +1711,8 @@
                 "max": true,
                 "min": true,
                 "show": true,
+                "sort": "avg",
+                "sortDesc": true,
                 "total": false,
                 "values": true
             },
@@ -1700,7 +1734,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "max_over_time(mysql_global_status_wsrep_evs_repl_latency{aggregator=\"Maximum\"}[$interval]) * on (service_name) group_left mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"}",
+                    "expr": "avg by (service_name) (max_over_time(mysql_global_status_wsrep_evs_repl_latency{aggregator=\"Maximum\"}[$interval])) * on (service_name) group_left avg by (service_name) (mysql_galera_variables_info{wsrep_cluster_name=\"$cluster\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1712,10 +1746,10 @@
             "timeFrom": null,
             "timeRegions": [],
             "timeShift": null,
-            "title": "Maximum  Galera Replication Latency",
+            "title": "Maximum Galera Replication Latency",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -1752,11 +1786,12 @@
         }
     ],
     "refresh": "1m",
-    "schemaVersion": 20,
+    "schemaVersion": 22,
     "style": "dark",
     "tags": [
         "Percona",
-        "MySQL_HA"
+        "MySQL_HA",
+        "PXC"
     ],
     "templating": {
         "list": [
@@ -1766,7 +1801,7 @@
                 "auto_count": 200,
                 "auto_min": "1s",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "hide": 0,
                 "includeAll": false,
                 "label": "Interval",
@@ -1821,46 +1856,25 @@
                 "type": "interval"
             },
             {
-                "allValue": null,
-                "current": {},
-                "datasource": "Prometheus",
-                "definition": "",
-                "hide": 2,
-                "includeAll": true,
-                "label": "Instance",
-                "multi": true,
-                "name": "service_names",
-                "options": [],
-                "query": "label_values(mysql_global_status_wsrep_local_state, service_name)",
-                "refresh": 2,
-                "regex": "",
-                "skipUrlSync": false,
-                "sort": 0,
-                "tagValuesQuery": "",
-                "tags": [],
-                "tagsQuery": "",
-                "type": "query",
-                "useTags": false
-            },
-            {
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "",
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_galera_variables_info, wsrep_cluster_name)",
                 "hide": 0,
                 "includeAll": false,
+                "index": -1,
                 "label": "Cluster",
                 "multi": false,
                 "multiFormat": "regex values",
                 "name": "cluster",
                 "options": [],
-                "query": "label_values(mysql_galera_variables_info{service_name=~\"$service_name_names\"}, wsrep_cluster_name)",
+                "query": "label_values(mysql_galera_variables_info, wsrep_cluster_name)",
                 "refresh": 2,
                 "refresh_on_load": false,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": null,
                 "tags": [],
                 "tagsQuery": null,
@@ -1870,10 +1884,34 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
+                "definition": "query_result(mysql_galera_variables_info{wsrep_cluster_name=~\"$cluster\"} * on(service_name) mysql_global_variables_wsrep_auto_increment_control)",
+                "hide": 2,
+                "includeAll": false,
+                "index": -1,
+                "label": "Instance",
+                "multi": true,
+                "name": "service_name",
+                "options": [],
+                "query": "query_result(mysql_galera_variables_info{wsrep_cluster_name=~\"$cluster\"} * on(service_name) mysql_global_variables_wsrep_auto_increment_control)",
+                "refresh": 2,
+                "regex": "/\"([^\"]+)\"/",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_name)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Node Name",
                 "multi": true,
                 "name": "node_name",
@@ -1882,7 +1920,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1890,12 +1928,13 @@
                 "useTags": false
             },
             {
-                "allValue": null,
+                "allValue": ".*",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Environment",
                 "multi": true,
                 "name": "environment",
@@ -1904,7 +1943,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1914,10 +1953,11 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Replication Set",
                 "multi": true,
                 "name": "replication_set",
@@ -1926,7 +1966,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1936,19 +1976,20 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Database",
                 "multi": true,
                 "name": "database",
                 "options": [],
                 "query": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1958,19 +1999,20 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Type",
                 "multi": true,
                 "name": "node_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1980,19 +2022,66 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Type",
                 "multi": true,
                 "name": "service_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "hide": 2,
+                "includeAll": true,
+                "index": -1,
+                "label": "Username",
+                "multi": true,
+                "name": "username",
+                "options": [],
+                "query": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "hide": 2,
+                "includeAll": true,
+                "index": -1,
+                "label": "Schema",
+                "multi": true,
+                "name": "schema",
+                "options": [],
+                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",

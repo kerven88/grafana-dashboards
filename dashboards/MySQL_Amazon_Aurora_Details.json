@@ -13,7 +13,6 @@
                 "showIn": 0,
                 "tags": [
                     "pmm_annotation",
-                    "$node_name",
                     "$service_name"
                 ],
                 "type": "tags"
@@ -36,7 +35,7 @@
     "gnetId": null,
     "graphTooltip": 1,
     "id": null,
-    "iteration": 1573828448877,
+    "iteration": 1581958104634,
     "links": [
         {
             "icon": "doc",
@@ -109,7 +108,7 @@
         },
         {
             "asDropdown": true,
-            "includeVars": true,
+            "includeVars": false,
             "keepTime": true,
             "tags": [
                 "PMM"
@@ -157,7 +156,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "This graph shows the number of Commits which Amazon Aurora engine performed as well as average commit latency. Graph Latency does not always correlate with the number of performed commits and can be quite high in certain situations.\n\n* **Number of Amazon Aurora Commits**: The average number of commit operations per second.\n\n* **Amazon Aurora Commit avg Latency**: The average amount of latency for commit operations",
             "editable": true,
@@ -171,6 +170,7 @@
                 "x": 0,
                 "y": 2
             },
+            "hiddenSeries": false,
             "id": 3,
             "legend": {
                 "alignAsTable": true,
@@ -228,7 +228,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "rate(mysql_global_status_auroradb_commits{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_auroradb_commits{service_name=~\"$service_name\"}[5m])",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_commits{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_auroradb_commits{service_name=~\"$service_name\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -241,7 +241,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "rate(mysql_global_status_auroradb_commit_latency{service_name=~\"$service_name\"}[$interval])/rate(mysql_global_status_auroradb_commits{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_auroradb_commit_latency{service_name=~\"$service_name\"}[5m])/irate(mysql_global_status_auroradb_commits{service_name=~\"$service_name\"}[5m])",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_commit_latency{service_name=~\"$service_name\"}[$interval])/(rate(mysql_global_status_auroradb_commits{service_name=~\"$service_name\"}[$interval]) > 0)) or avg by (service_name) (irate(mysql_global_status_auroradb_commit_latency{service_name=~\"$service_name\"}[5m])/(irate(mysql_global_status_auroradb_commits{service_name=~\"$service_name\"}[5m]) > 0))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -259,7 +259,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -306,7 +306,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "This graph shows us what statements contribute most load on the system as well as what load corresponds to Amazon Aurora transaction commit.\n\n* **Write Transaction Commit Load**: Load in Average Active Sessions per second for COMMIT operations\n\n* **UPDATE load**: Load in Average Active Sessions per second for UPDATE queries\n\n* **SELECT load**: Load in Average Active Sessions per second for SELECT queries\n\n* **DELETE load**: Load in Average Active Sessions per second for DELETE queries\n\n* **INSERT load**: Load in Average Active Sessions per second for INSERT queries\n\nAn *active session* is a connection that has submitted work to the database engine and is waiting for a response from it. For example, if you submit an SQL query to the database engine, the database session is active while the database engine is processing that query.",
             "editable": true,
@@ -320,6 +320,7 @@
                 "x": 12,
                 "y": 2
             },
+            "hiddenSeries": false,
             "id": 21,
             "legend": {
                 "alignAsTable": true,
@@ -360,7 +361,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "rate(mysql_global_status_auroradb_commit_latency{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_commit_latency{service_name=~\"$service_name\"}[5m])/1000000",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_commit_latency{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_commit_latency{service_name=~\"$service_name\"}[5m])/1000000)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -370,7 +371,7 @@
                     "step": 300
                 },
                 {
-                    "expr": "rate(mysql_global_status_auroradb_ddl_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_ddl_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_ddl_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_ddl_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -378,7 +379,7 @@
                     "refId": "A"
                 },
                 {
-                    "expr": "rate(mysql_global_status_auroradb_select_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_select_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_select_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_select_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -386,7 +387,7 @@
                     "refId": "B"
                 },
                 {
-                    "expr": "rate(mysql_global_status_auroradb_insert_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_insert_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_insert_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_insert_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -394,7 +395,7 @@
                     "refId": "D"
                 },
                 {
-                    "expr": "rate(mysql_global_status_auroradb_update_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_update_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_update_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_update_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -402,7 +403,7 @@
                     "refId": "E"
                 },
                 {
-                    "expr": "rate(mysql_global_status_auroradb_delete_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_delete_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_delete_stmt_duration{service_name=~\"$service_name\"}[$interval])/1000000 or irate(mysql_global_status_auroradb_delete_stmt_duration{service_name=~\"$service_name\"}[5m])/1000000)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -418,7 +419,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -457,7 +458,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "This graph shows how much memory is used by Amazon Aurora lock manager as well as amount of memory used by Amazon Aurora to store Data Dictionary.\n\n* **Aurora Lock Manager Memory**: the amount of memory used by the Lock Manager, the module responsible for handling row lock requests for concurrent transactions.\n\n* **Aurora Dictionary Memory**: the amount of memory used by the Dictionary, the space that contains metadata used to keep track of database objects, such as tables and indexes.",
             "editable": true,
@@ -471,6 +472,7 @@
                 "x": 0,
                 "y": 10
             },
+            "hiddenSeries": false,
             "id": 22,
             "legend": {
                 "alignAsTable": true,
@@ -520,7 +522,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "max_over_time(mysql_global_status_aurora_lockmgr_memory_used{service_name=~\"$service_name\"}[$interval]) or max_over_time(mysql_global_status_aurora_lockmgr_memory_used{service_name=~\"$service_name\"}[5m])",
+                    "expr": "avg by (service_name) (max_over_time(mysql_global_status_aurora_lockmgr_memory_used{service_name=~\"$service_name\"}[$interval]) or max_over_time(mysql_global_status_aurora_lockmgr_memory_used{service_name=~\"$service_name\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -533,7 +535,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "max_over_time(mysql_global_status_aurora_dict_sys_mem_size{service_name=~\"$service_name\"}[$interval]) or max_over_time(mysql_global_status_aurora_dict_sys_mem_size{service_name=~\"$service_name\"}[5m])",
+                    "expr": "avg by (service_name) (max_over_time(mysql_global_status_aurora_dict_sys_mem_size{service_name=~\"$service_name\"}[$interval]) or max_over_time(mysql_global_status_aurora_dict_sys_mem_size{service_name=~\"$service_name\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -551,7 +553,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -600,7 +602,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "This graph shows average latency for the most important types of statements. Latency spikes are often indicative of the instance overload.\n\n* **DDL Latency:** Average time to execute DDL queries\n\n* **DELETE Latency**: Average time to execute DELETE queries\n\n* **UPDATE Latency**: Average time to execute UPDATE queries\n\n* **SELECT Latency**: Average time to execute SELECT queries\n\n* **INSERT Latency**: Average time to execute INSERT queries",
             "editable": true,
@@ -614,6 +616,7 @@
                 "x": 12,
                 "y": 10
             },
+            "hiddenSeries": false,
             "id": 24,
             "legend": {
                 "alignAsTable": true,
@@ -651,7 +654,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "(rate(mysql_global_status_auroradb_ddl_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'alter_table|create_index|drop_index|drop_table'}[$interval])) without(command)))",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_auroradb_ddl_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'alter_table|create_index|drop_index|drop_table'}[$interval])) without(command))))",
                     "format": "time_series",
                     "hide": false,
                     "interval": "$interval",
@@ -660,7 +663,7 @@
                     "refId": "A"
                 },
                 {
-                    "expr": "(rate(mysql_global_status_auroradb_select_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command='select'}[$interval])) without(command))+rate(mysql_global_status_qcache_hits{service_name=~\"$service_name\"}[$interval]))",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_auroradb_select_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command='select'}[$interval])) without(command))+rate(mysql_global_status_qcache_hits{service_name=~\"$service_name\"}[$interval])))",
                     "format": "time_series",
                     "hide": false,
                     "interval": "$interval",
@@ -669,7 +672,7 @@
                     "refId": "B"
                 },
                 {
-                    "expr": "(rate(mysql_global_status_auroradb_insert_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'insert|insert_select'}[$interval])) without(command)))",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_auroradb_insert_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'insert|insert_select'}[$interval])) without(command))))",
                     "format": "time_series",
                     "hide": false,
                     "interval": "$interval",
@@ -678,7 +681,7 @@
                     "refId": "D"
                 },
                 {
-                    "expr": "(rate(mysql_global_status_auroradb_update_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'update|update_multi'}[$interval])) without(command)))",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_auroradb_update_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'update|update_multi'}[$interval])) without(command))))",
                     "format": "time_series",
                     "hide": false,
                     "interval": "$interval",
@@ -687,7 +690,7 @@
                     "refId": "E"
                 },
                 {
-                    "expr": "(rate(mysql_global_status_auroradb_delete_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'delete|delete_multi'}[$interval])) without(command)))",
+                    "expr": "avg by (service_name) ((rate(mysql_global_status_auroradb_delete_stmt_duration{service_name=~\"$service_name\"}[$interval])/ (sum(rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'delete|delete_multi'}[$interval])) without(command))))",
                     "format": "time_series",
                     "hide": false,
                     "interval": "$interval",
@@ -704,7 +707,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -754,7 +757,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "Amazon Aurora MySQL allows a number of commands which are not available in standard MySQL. This graph shows usage of such commands.  Regular \u201cunit_test\u201d calls can be seen in default Amazon Aurora install,  the rest will depend on your workload.\n\n* `show_volume_status`: The number of executions per second of the command SHOW VOLUME STATUS. The SHOW VOLUME STATUS query returns two server status variables, Disks and Nodes. These variables represent the total number of logical blocks of data and storage nodes, respectively, for the DB cluster volume.\n\n* `awslambda`: The number of AWS Lambda calls per second. AWS Lambda is an event-drive, server-less computing platform provided by AWS. It is a compute service that run codes in response to an event. You can run any kind of code from Aurora invoking Lambda from a stored procedure or a trigger.\n\n* `alter_system`: The number of executions per second of the special query ALTER SYSTEM, that is a special query to simulate an instance crash, a disk failure, a disk congestion or a replica failure. It\u2019s a useful query for testing the system.",
             "editable": true,
@@ -768,6 +771,7 @@
                 "x": 0,
                 "y": 19
             },
+            "hiddenSeries": false,
             "id": 25,
             "legend": {
                 "alignAsTable": true,
@@ -805,7 +809,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'awslambda|alter_system|unit_test|show_volume_status'}[$interval])",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_commands_total{service_name=~\"$service_name\",command=~'awslambda|alter_system|unit_test|show_volume_status'}[$interval]))",
                     "format": "time_series",
                     "hide": false,
                     "interval": "$interval",
@@ -822,7 +826,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -874,7 +878,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "This graph shows different kinds of Internal Amazon Aurora MySQL Problems which general should be zero in normal operation.\n\nAnything non-zero is worth examining in greater depth.",
             "editable": true,
@@ -888,6 +892,7 @@
                 "x": 12,
                 "y": 19
             },
+            "hiddenSeries": false,
             "id": 26,
             "legend": {
                 "alignAsTable": true,
@@ -925,7 +930,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "rate(mysql_global_status_auroradb_thread_deadlocks{service_name=~\"$service_name\"}[$interval])",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_auroradb_thread_deadlocks{service_name=~\"$service_name\"}[$interval]))",
                     "format": "time_series",
                     "hide": false,
                     "interval": "$interval",
@@ -934,7 +939,7 @@
                     "refId": "A"
                 },
                 {
-                    "expr": "rate(mysql_global_status_aurora_missing_history_on_replica_incidents{service_name=~\"$service_name\"}[$interval])",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_aurora_missing_history_on_replica_incidents{service_name=~\"$service_name\"}[$interval]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -942,7 +947,7 @@
                     "refId": "B"
                 },
                 {
-                    "expr": "rate(mysql_global_status_aurora_reserved_mem_exceeded_incidents{service_name=~\"$service_name\"}[$interval])",
+                    "expr": "avg by (service_name) (rate(mysql_global_status_aurora_reserved_mem_exceeded_incidents{service_name=~\"$service_name\"}[$interval]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -958,7 +963,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -993,7 +998,7 @@
         }
     ],
     "refresh": "1m",
-    "schemaVersion": 20,
+    "schemaVersion": 21,
     "style": "dark",
     "tags": [
         "Percona",
@@ -1007,7 +1012,7 @@
                 "auto_count": 200,
                 "auto_min": "1s",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "hide": 0,
                 "includeAll": false,
                 "label": "Interval",
@@ -1062,46 +1067,21 @@
                 "type": "interval"
             },
             {
-                "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values(mysql_global_variables_aurora_lab_mode, node_name)",
-                "hide": 0,
-                "includeAll": false,
-                "label": "Node Name",
-                "multi": false,
-                "multiFormat": "regex values",
-                "name": "node_name",
-                "options": [],
-                "query": "label_values(mysql_global_variables_aurora_lab_mode, node_name)",
-                "refresh": 2,
-                "refresh_on_load": false,
-                "regex": "",
-                "skipUrlSync": false,
-                "sort": 1,
-                "tagValuesQuery": null,
-                "tags": [],
-                "tagsQuery": null,
-                "type": "query",
-                "useTags": false
-            },
-            {
-                "allValue": null,
-                "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values(mysql_global_variables_aurora_lab_mode{node_name=~\"$node_name\"}, service_name)",
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_global_status_auroradb_thread_deadlocks, service_name)",
                 "hide": 0,
                 "includeAll": false,
                 "label": "Service Name",
                 "multi": false,
                 "name": "service_name",
                 "options": [],
-                "query": "label_values(mysql_global_variables_aurora_lab_mode{node_name=~\"$node_name\"}, service_name)",
+                "query": "label_values(mysql_global_status_auroradb_thread_deadlocks, service_name)",
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1109,9 +1089,34 @@
                 "useTags": false
             },
             {
+                "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_global_status_auroradb_thread_deadlocks{service_name=~\"$service_name\"}, node_name)",
+                "hide": 2,
+                "includeAll": false,
+                "label": "Node Name",
+                "multi": false,
+                "multiFormat": "regex values",
+                "name": "node_name",
+                "options": [],
+                "query": "label_values(mysql_global_status_auroradb_thread_deadlocks{service_name=~\"$service_name\"}, node_name)",
+                "refresh": 2,
+                "refresh_on_load": false,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": null,
+                "tags": [],
+                "tagsQuery": null,
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": ".*",
+                "current": {},
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
                 "hide": 2,
                 "includeAll": true,
@@ -1123,7 +1128,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1133,7 +1138,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, cluster)",
                 "hide": 2,
                 "includeAll": true,
@@ -1145,7 +1150,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1155,7 +1160,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
                 "hide": 2,
                 "includeAll": true,
@@ -1167,7 +1172,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1177,7 +1182,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
                 "hide": 2,
                 "includeAll": true,
@@ -1186,10 +1191,10 @@
                 "name": "database",
                 "options": [],
                 "query": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1199,7 +1204,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
                 "hide": 2,
                 "includeAll": true,
@@ -1208,10 +1213,10 @@
                 "name": "node_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -1221,7 +1226,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
                 "hide": 2,
                 "includeAll": true,
@@ -1230,10 +1235,55 @@
                 "name": "service_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "hide": 2,
+                "includeAll": true,
+                "index": -1,
+                "label": "Username",
+                "multi": true,
+                "name": "username",
+                "options": [],
+                "query": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "hide": 2,
+                "includeAll": true,
+                "label": "Schema",
+                "multi": true,
+                "name": "schema",
+                "options": [],
+                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",

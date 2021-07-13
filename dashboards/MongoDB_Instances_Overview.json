@@ -8,6 +8,7 @@
                 "hide": false,
                 "iconColor": "#e0752d",
                 "limit": 100,
+                "matchAny": true,
                 "name": "PMM Annotations",
                 "showIn": 0,
                 "tags": [
@@ -108,7 +109,7 @@
         },
         {
             "asDropdown": true,
-            "includeVars": true,
+            "includeVars": false,
             "keepTime": true,
             "tags": [
                 "PMM"
@@ -122,6 +123,12 @@
         {
             "breadcrumbItemsMaxAmount": 6,
             "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "gridPos": {
                 "h": 2,
                 "w": 24,
@@ -132,7 +139,6 @@
             "id": 999,
             "isRootDashboard": true,
             "links": [],
-            "options": {},
             "targets": [
                 {
                     "expr": "",
@@ -170,6 +176,12 @@
             ],
             "datasource": null,
             "decimals": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -201,7 +213,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -256,6 +267,12 @@
             ],
             "datasource": null,
             "decimals": 2,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "s",
             "gauge": {
                 "maxValue": 100,
@@ -266,7 +283,7 @@
             },
             "gridPos": {
                 "h": 2,
-                "w": 5,
+                "w": 4,
                 "x": 4,
                 "y": 3
             },
@@ -287,7 +304,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -342,7 +358,13 @@
             ],
             "datasource": null,
             "decimals": 2,
-            "format": "bits",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "format": "decmbytes",
             "gauge": {
                 "maxValue": 100,
                 "minValue": 0,
@@ -352,8 +374,8 @@
             },
             "gridPos": {
                 "h": 2,
-                "w": 5,
-                "x": 9,
+                "w": 4,
+                "x": 8,
                 "y": 3
             },
             "id": 98,
@@ -373,7 +395,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -394,7 +415,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "sum(mongodb_memory{service_name=~\"$service_name\",type=~\"resident|virtual\"})",
+                    "expr": "sum(mongodb_memory{service_name=~\"$service_name\",type=~\"resident\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -405,7 +426,7 @@
             "thresholds": "",
             "timeFrom": null,
             "timeShift": null,
-            "title": "Total Used Memory",
+            "title": "Total Used Resident Memory",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -428,6 +449,103 @@
             ],
             "datasource": null,
             "decimals": 2,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "format": "decmbytes",
+            "gauge": {
+                "maxValue": 100,
+                "minValue": 0,
+                "show": false,
+                "thresholdLabels": false,
+                "thresholdMarkers": true
+            },
+            "gridPos": {
+                "h": 2,
+                "w": 4,
+                "x": 12,
+                "y": 3
+            },
+            "id": 1000,
+            "interval": null,
+            "links": [],
+            "mappingType": 1,
+            "mappingTypes": [
+                {
+                    "name": "value to text",
+                    "value": 1
+                },
+                {
+                    "name": "range to text",
+                    "value": 2
+                }
+            ],
+            "maxDataPoints": 100,
+            "nullPointMode": "connected",
+            "nullText": null,
+            "postfix": "",
+            "postfixFontSize": "50%",
+            "prefix": "",
+            "prefixFontSize": "50%",
+            "rangeMaps": [
+                {
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }
+            ],
+            "sparkline": {
+                "fillColor": "rgba(31, 118, 189, 0.18)",
+                "full": false,
+                "lineColor": "rgb(31, 120, 193)",
+                "show": true
+            },
+            "tableColumn": "",
+            "targets": [
+                {
+                    "expr": "sum(mongodb_memory{service_name=~\"$service_name\",type=~\"virtual\"})",
+                    "format": "time_series",
+                    "interval": "$interval",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": "",
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Total Used Virtual Memory",
+            "type": "singlestat",
+            "valueFontSize": "50%",
+            "valueMaps": [
+                {
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }
+            ],
+            "valueName": "current"
+        },
+        {
+            "cacheTimeout": null,
+            "colorBackground": false,
+            "colorValue": false,
+            "colors": [
+                "#299c46",
+                "#1F60C4",
+                "#d44a3a"
+            ],
+            "datasource": null,
+            "decimals": 2,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "bits",
             "gauge": {
                 "maxValue": 100,
@@ -438,8 +556,8 @@
             },
             "gridPos": {
                 "h": 2,
-                "w": 5,
-                "x": 14,
+                "w": 4,
+                "x": 16,
                 "y": 3
             },
             "id": 99,
@@ -459,7 +577,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -514,6 +631,12 @@
             ],
             "datasource": null,
             "decimals": 2,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -524,8 +647,8 @@
             },
             "gridPos": {
                 "h": 2,
-                "w": 5,
-                "x": 19,
+                "w": 4,
+                "x": 20,
                 "y": 3
             },
             "id": 75,
@@ -545,7 +668,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -614,6 +736,12 @@
             ],
             "datasource": null,
             "decimals": 0,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -645,7 +773,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -700,6 +827,12 @@
             ],
             "datasource": null,
             "decimals": 0,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -731,7 +864,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -786,6 +918,12 @@
             ],
             "datasource": null,
             "decimals": 2,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -817,7 +955,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -872,6 +1009,12 @@
             ],
             "datasource": null,
             "decimals": 2,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "\u00b5s",
             "gauge": {
                 "maxValue": 100,
@@ -903,7 +1046,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -924,7 +1066,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "max(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m])\n)",
+                    "expr": "max(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m]) > 0)\n)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -963,7 +1105,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "TCP connections (Incoming) in mongod processes",
                     "editable": true,
@@ -985,6 +1127,7 @@
                         "y": 9
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 38,
                     "legend": {
                         "alignAsTable": true,
@@ -1033,7 +1176,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(max_over_time(mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"}[5m]) or\nmax_over_time(mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"}[5m]) or\nmax_over_time(mongodb_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_connections{service_name=~\"$service_name\", state=\"current\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((max_over_time(mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"}[5m]) or\nmax_over_time(mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"}[5m]) or\nmax_over_time(mongodb_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_connections{service_name=~\"$service_name\", state=\"current\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -1059,7 +1202,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -1113,6 +1256,7 @@
                         "y": 9
                     },
                     "id": 138,
+                    "interval": "",
                     "links": [],
                     "options": {},
                     "polystat": {
@@ -1120,6 +1264,7 @@
                         "columnAutoSize": true,
                         "columns": "",
                         "defaultClickThrough": "",
+                        "defaultClickThroughNewTab": false,
                         "defaultClickThroughSanitize": false,
                         "displayLimit": 100,
                         "fontAutoScale": true,
@@ -1131,7 +1276,7 @@
                         "globalOperatorName": "current",
                         "globalUnitFormat": "short",
                         "gradientEnabled": true,
-                        "hexagonSortByDirection": "asc",
+                        "hexagonSortByDirection": 1,
                         "hexagonSortByField": "name",
                         "maxMetrics": 0,
                         "polygonBorderColor": "black",
@@ -1146,16 +1291,16 @@
                         "tooltipDisplayTextTriggeredEmpty": "OK",
                         "tooltipFontSize": 12,
                         "tooltipFontType": "Roboto",
-                        "tooltipPrimarySortDirection": "desc",
+                        "tooltipPrimarySortDirection": 2,
                         "tooltipPrimarySortField": "thresholdLevel",
-                        "tooltipSecondarySortDirection": "desc",
+                        "tooltipSecondarySortDirection": 2,
                         "tooltipSecondarySortField": "value",
                         "tooltipTimestampEnabled": true
                     },
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -1168,7 +1313,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -1193,7 +1338,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "max_over_time(mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"}[5m]) or\nmax_over_time(mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"}[5m]) or\nmax_over_time(mongodb_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_connections{service_name=~\"$service_name\", state=\"current\"}[5m])",
+                            "expr": "avg by (service_name) (max_over_time(mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"}[5m]) or\nmax_over_time(mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"}[5m]) or\nmax_over_time(mongodb_connections{service_name=~\"$service_name\", state=\"current\"}[$interval]) or max_over_time(mongodb_connections{service_name=~\"$service_name\", state=\"current\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1226,7 +1371,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Open cursors count",
                     "editable": true,
@@ -1248,6 +1393,7 @@
                         "y": 10
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 142,
                     "legend": {
                         "alignAsTable": true,
@@ -1296,7 +1442,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"total\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"total\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"total\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"total\"}))",
+                            "expr": "topk(5,avg by (service_name) ((mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"total\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"total\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"total\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"total\"})))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -1322,7 +1468,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -1419,7 +1565,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -1432,7 +1578,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -1457,7 +1603,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"total\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"total\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"total\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"total\"}",
+                            "expr": "avg by (service_name) (mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"total\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"total\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"total\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"total\"})",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1475,7 +1621,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Open cursors that are in pinned state.",
                     "editable": true,
@@ -1497,6 +1643,7 @@
                         "y": 18
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 25,
                     "legend": {
                         "alignAsTable": true,
@@ -1545,7 +1692,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"pinned\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"pinned\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"pinned\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"pinned\"}))",
+                            "expr": "topk(5,avg by (service_name) ((mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"pinned\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"pinned\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"pinned\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"pinned\"})))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -1571,7 +1718,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -1668,7 +1815,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -1681,7 +1828,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -1706,7 +1853,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"pinned\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"pinned\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"pinned\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"pinned\"}",
+                            "expr": "avg by (service_name) (mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"pinned\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"pinned\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"pinned\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"pinned\"})",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1724,7 +1871,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "noTimeout cursors currently open",
                     "editable": true,
@@ -1746,6 +1893,7 @@
                         "y": 26
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 141,
                     "legend": {
                         "alignAsTable": true,
@@ -1794,7 +1942,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"noTimeout\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"noTimeout\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"noTimeout\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"noTimeout\"}))",
+                            "expr": "topk(5,avg by (service_name) ((mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"noTimeout\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"noTimeout\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"noTimeout\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"noTimeout\"})))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -1820,7 +1968,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -1917,7 +2065,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -1930,7 +2078,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -1955,7 +2103,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"noTimeout\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"noTimeout\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"noTimeout\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"noTimeout\"}",
+                            "expr": "avg by (service_name) (mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", state=\"noTimeout\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\", state=\"noTimeout\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", state=\"noTimeout\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\", state=\"noTimeout\"})",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1988,7 +2136,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Average latency of (other) command operations",
                     "editable": true,
@@ -2010,6 +2158,7 @@
                         "y": 11
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 213,
                     "legend": {
                         "alignAsTable": true,
@@ -2058,7 +2207,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m])\n))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m]) > 0)\n)))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -2068,7 +2217,7 @@
                             "step": 300
                         },
                         {
-                            "expr": "avg(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m])\n)",
+                            "expr": "avg(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m]) > 0)\n)",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2084,7 +2233,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -2181,7 +2330,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -2194,7 +2343,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -2209,7 +2358,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m])\n",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m]) > 0))\n",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2227,7 +2376,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Average latency of read operations",
                     "editable": true,
@@ -2249,6 +2398,7 @@
                         "y": 19
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 210,
                     "legend": {
                         "alignAsTable": true,
@@ -2297,7 +2447,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[5m])\n))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[5m]) > 0)\n)))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -2307,7 +2457,7 @@
                             "step": 300
                         },
                         {
-                            "expr": "avg(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[5m])\n)",
+                            "expr": "avg(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[5m]) > 0)\n)",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2323,7 +2473,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -2420,7 +2570,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -2433,7 +2583,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -2448,7 +2598,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[5m])\n",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"read\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"read\"}[5m]) > 0))\n",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2466,7 +2616,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Average latency of write operations",
                     "editable": true,
@@ -2488,6 +2638,7 @@
                         "y": 27
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 212,
                     "legend": {
                         "alignAsTable": true,
@@ -2536,7 +2687,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[5m])\n))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[5m]) > 0)\n)))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -2546,7 +2697,7 @@
                             "step": 300
                         },
                         {
-                            "expr": "avg(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[5m])\n)",
+                            "expr": "avg(rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[5m]) > 0)\n)",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2562,7 +2713,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -2659,7 +2810,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -2672,7 +2823,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -2687,7 +2838,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) / \nrate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[5m]) / \nirate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[5m])\n",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) / \n(rate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[$interval]) > 0) or\nirate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"write\"}[5m]) / \n(irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"write\"}[5m]) > 0))\n",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2730,6 +2881,12 @@
             "datasource": null,
             "decimals": 2,
             "description": "Ratio of index entries scanned / number of documents returned",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -2761,7 +2918,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2822,6 +2978,12 @@
             "datasource": null,
             "decimals": 2,
             "description": "Ratio of number of documents returned / index entries scanned",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -2853,7 +3015,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2915,6 +3076,12 @@
             "datasource": null,
             "decimals": 2,
             "description": "Ratio of index entries scanned compared divided by sum of index entries scanned plus whole documents scanned.",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -2946,7 +3113,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2978,7 +3144,7 @@
             "thresholds": "",
             "timeFrom": null,
             "timeShift": null,
-            "title": "Min  Document Scanned Ratio",
+            "title": "Min Document Scanned Ratio",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -3002,6 +3168,12 @@
             ],
             "datasource": null,
             "decimals": 2,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -3033,7 +3205,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -3065,7 +3236,7 @@
             "thresholds": "",
             "timeFrom": null,
             "timeShift": null,
-            "title": "Max  Document Scanned Ratio",
+            "title": "Max Document Scanned Ratio",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -3093,7 +3264,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -3115,6 +3286,7 @@
                         "y": 15
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 63,
                     "interval": "",
                     "legend": {
@@ -3162,7 +3334,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[$interval]) / ignoring(state) \nrate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$interval])\nor\n(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[5m]) / ignoring(state) \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m]))\n))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[$interval]) / ignoring(state) \nrate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$interval])\nor\n(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[5m]) / ignoring(state) \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m]))\n)))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -3188,7 +3360,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -3284,7 +3456,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -3297,7 +3469,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -3306,7 +3478,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[$interval]) / ignoring(state) \nrate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$interval])\nor\n(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[5m]) / ignoring(state) \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m]))",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[$interval]) / ignoring(state) \nrate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$interval])\nor\n(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[5m]) / ignoring(state) \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3324,7 +3496,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -3346,6 +3518,7 @@
                         "y": 23
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 189,
                     "legend": {
                         "alignAsTable": true,
@@ -3392,7 +3565,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$interval])/ ignoring(state)\nrate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$interval])\nor\nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m])/ ignoring(state)\nirate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$interval])/ ignoring(state)\nrate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$interval])\nor\nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m])/ ignoring(state)\nirate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -3418,7 +3591,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -3514,7 +3687,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -3527,7 +3700,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -3536,7 +3709,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$interval])/ ignoring(state)\nrate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$interval])\nor\nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m])/ ignoring(state)\nirate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$interval])/ ignoring(state)\nrate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$interval])\nor\nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m])/ ignoring(state)\nirate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3554,7 +3727,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Ratio of index entries scanned compared divided by sum of index entries scanned plus whole documents scanned.",
                     "editable": true,
@@ -3576,6 +3749,7 @@
                         "y": 31
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 217,
                     "legend": {
                         "alignAsTable": true,
@@ -3647,7 +3821,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -3743,7 +3917,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -3756,7 +3930,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -3819,6 +3993,12 @@
             "datasource": null,
             "decimals": 2,
             "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -3850,7 +4030,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -3906,6 +4085,12 @@
             "datasource": null,
             "decimals": 2,
             "description": "Documents inserted, updated, deleted or returned per second.",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -3937,7 +4122,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -3993,6 +4177,12 @@
             "datasource": null,
             "decimals": 2,
             "description": "Operations that are currently queued and waiting for read or write locks",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -4024,7 +4214,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -4080,6 +4269,12 @@
             "datasource": null,
             "decimals": 2,
             "description": "Asserts. (Not a primary indicator of anything.)",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "ops",
             "gauge": {
                 "maxValue": 100,
@@ -4111,7 +4306,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -4143,7 +4337,7 @@
             "thresholds": "50,100",
             "timeFrom": null,
             "timeShift": null,
-            "title": "Total  Assert Events",
+            "title": "Total Assert Events",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -4171,7 +4365,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "The average rate of commands performed per second over the selected sample period",
                     "editable": true,
@@ -4193,6 +4387,7 @@
                         "y": 19
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 148,
                     "legend": {
                         "alignAsTable": true,
@@ -4267,7 +4462,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -4328,6 +4523,7 @@
                         "columnAutoSize": true,
                         "columns": "",
                         "defaultClickThrough": "",
+                        "defaultClickThroughNewTab": false,
                         "defaultClickThroughSanitize": false,
                         "displayLimit": 100,
                         "fontAutoScale": true,
@@ -4339,7 +4535,7 @@
                         "globalOperatorName": "avg",
                         "globalUnitFormat": "short",
                         "gradientEnabled": true,
-                        "hexagonSortByDirection": "asc",
+                        "hexagonSortByDirection": 1,
                         "hexagonSortByField": "name",
                         "maxMetrics": 0,
                         "polygonBorderColor": "black",
@@ -4354,16 +4550,16 @@
                         "tooltipDisplayTextTriggeredEmpty": "OK",
                         "tooltipFontSize": 12,
                         "tooltipFontType": "Roboto",
-                        "tooltipPrimarySortDirection": "desc",
+                        "tooltipPrimarySortDirection": 2,
                         "tooltipPrimarySortField": "thresholdLevel",
-                        "tooltipSecondarySortDirection": "desc",
+                        "tooltipSecondarySortDirection": 2,
                         "tooltipSecondarySortField": "value",
                         "tooltipTimestampEnabled": true
                     },
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -4376,7 +4572,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -4419,7 +4615,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -4441,6 +4637,7 @@
                         "y": 27
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 152,
                     "legend": {
                         "alignAsTable": true,
@@ -4515,7 +4712,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -4576,6 +4773,7 @@
                         "columnAutoSize": true,
                         "columns": "",
                         "defaultClickThrough": "",
+                        "defaultClickThroughNewTab": false,
                         "defaultClickThroughSanitize": false,
                         "displayLimit": 100,
                         "fontAutoScale": true,
@@ -4587,7 +4785,7 @@
                         "globalOperatorName": "avg",
                         "globalUnitFormat": "short",
                         "gradientEnabled": true,
-                        "hexagonSortByDirection": "asc",
+                        "hexagonSortByDirection": 1,
                         "hexagonSortByField": "name",
                         "maxMetrics": 0,
                         "polygonBorderColor": "black",
@@ -4602,16 +4800,16 @@
                         "tooltipDisplayTextTriggeredEmpty": "OK",
                         "tooltipFontSize": 12,
                         "tooltipFontType": "Roboto",
-                        "tooltipPrimarySortDirection": "desc",
+                        "tooltipPrimarySortDirection": 2,
                         "tooltipPrimarySortField": "thresholdLevel",
-                        "tooltipSecondarySortDirection": "desc",
+                        "tooltipSecondarySortDirection": 2,
                         "tooltipSecondarySortField": "value",
                         "tooltipTimestampEnabled": true
                     },
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -4624,7 +4822,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -4667,7 +4865,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -4689,6 +4887,7 @@
                         "y": 35
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 150,
                     "legend": {
                         "alignAsTable": true,
@@ -4763,7 +4962,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -4859,7 +5058,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -4872,7 +5071,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -4915,7 +5114,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -4937,6 +5136,7 @@
                         "y": 43
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 151,
                     "legend": {
                         "alignAsTable": true,
@@ -5011,7 +5211,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -5107,7 +5307,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -5120,7 +5320,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -5163,7 +5363,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -5185,6 +5385,7 @@
                         "y": 51
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 154,
                     "legend": {
                         "alignAsTable": true,
@@ -5259,7 +5460,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -5355,7 +5556,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -5368,7 +5569,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -5411,7 +5612,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "editable": true,
@@ -5433,6 +5634,7 @@
                         "y": 59
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 153,
                     "legend": {
                         "alignAsTable": true,
@@ -5507,7 +5709,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -5603,7 +5805,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -5616,7 +5818,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -5674,7 +5876,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the actual number of documents that were affected on average during the given time period. A single *update* command for example could perform updates on hundreds or thousands of documents. If these counters seem high, you might want to check your statements to make sure they are properly operating against the documents that they should.",
                     "editable": true,
@@ -5696,6 +5898,7 @@
                         "y": 20
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 36,
                     "legend": {
                         "alignAsTable": true,
@@ -5743,7 +5946,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"deleted\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"deleted\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"deleted\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"deleted\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -5769,7 +5972,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -5865,7 +6068,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -5878,7 +6081,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -5903,7 +6106,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"deleted\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"deleted\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"deleted\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"deleted\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -5921,7 +6124,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the actual number of documents that were affected on average during the given time period. A single *update* command for example could perform updates on hundreds or thousands of documents. If these counters seem high, you might want to check your statements to make sure they are properly operating against the documents that they should.",
                     "editable": true,
@@ -5943,6 +6146,7 @@
                         "y": 28
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 175,
                     "legend": {
                         "alignAsTable": true,
@@ -5990,7 +6194,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"inserted\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"inserted\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"inserted\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"inserted\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -6016,7 +6220,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -6112,7 +6316,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -6125,7 +6329,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -6150,7 +6354,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"inserted\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"inserted\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"inserted\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"inserted\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -6168,7 +6372,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the actual number of documents that were affected on average during the given time period. A single *update* command for example could perform updates on hundreds or thousands of documents. If these counters seem high, you might want to check your statements to make sure they are properly operating against the documents that they should.",
                     "editable": true,
@@ -6190,6 +6394,7 @@
                         "y": 36
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 176,
                     "legend": {
                         "alignAsTable": true,
@@ -6237,7 +6442,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"returned\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"returned\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"returned\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"returned\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -6263,7 +6468,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -6359,7 +6564,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -6372,7 +6577,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -6397,7 +6602,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"returned\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"returned\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"returned\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"returned\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -6415,7 +6620,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the actual number of documents that were affected on average during the given time period. A single *update* command for example could perform updates on hundreds or thousands of documents. If these counters seem high, you might want to check your statements to make sure they are properly operating against the documents that they should.",
                     "editable": true,
@@ -6437,6 +6642,7 @@
                         "y": 44
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 177,
                     "legend": {
                         "alignAsTable": true,
@@ -6484,7 +6690,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"updated\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"updated\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"updated\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"updated\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -6510,7 +6716,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -6606,7 +6812,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -6619,7 +6825,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -6644,7 +6850,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"updated\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"updated\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"updated\"}[$interval]) or \nirate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\",state=\"updated\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -6677,7 +6883,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This shows the number of read and write operations that are waiting due to for a lock. Consistently small values here should not be of concern, but if the values are consistently high the queries causing long lock times should be tracked down and fixed.",
                     "editable": true,
@@ -6699,6 +6905,7 @@
                         "y": 21
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 40,
                     "legend": {
                         "alignAsTable": true,
@@ -6746,7 +6953,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(max_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"reader\"}[$interval]) or \nmax_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"reader\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((max_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"reader\"}[$interval]) or \nmax_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"reader\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -6772,7 +6979,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -6868,7 +7075,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -6881,7 +7088,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -6906,7 +7113,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "max_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"reader\"}[$interval]) or \nmax_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"reader\"}[5m])",
+                            "expr": "avg by (service_name) (max_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"reader\"}[$interval]) or \nmax_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"reader\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -6924,7 +7131,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This shows the number of read and write operations that are waiting due to for a lock. Consistently small values here should not be of concern, but if the values are consistently high the queries causing long lock times should be tracked down and fixed.",
                     "editable": true,
@@ -6946,6 +7153,7 @@
                         "y": 29
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 182,
                     "legend": {
                         "alignAsTable": true,
@@ -6993,7 +7201,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(max_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"writer\"}[$interval]) or \nmax_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"writer\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((max_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"writer\"}[$interval]) or \nmax_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"writer\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -7019,7 +7227,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -7115,7 +7323,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -7128,7 +7336,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -7153,7 +7361,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "max_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"writer\"}[$interval]) or \nmax_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"writer\"}[5m])",
+                            "expr": "avg by (service_name) (max_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"writer\"}[$interval]) or \nmax_over_time(mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\",type=\"writer\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -7186,7 +7394,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the number of assert events per second on average over the given time period. In most cases assertions are trivial, but you would want to check your log files if this counter spikes or is consistently high.",
                     "editable": true,
@@ -7205,9 +7413,10 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 70
+                        "y": 22
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 202,
                     "legend": {
                         "alignAsTable": true,
@@ -7256,7 +7465,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -7282,7 +7491,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -7334,7 +7543,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 70
+                        "y": 22
                     },
                     "id": 203,
                     "links": [],
@@ -7379,7 +7588,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -7392,7 +7601,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -7417,7 +7626,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"msg\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -7435,7 +7644,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the number of assert events per second on average over the given time period. In most cases assertions are trivial, but you would want to check your log files if this counter spikes or is consistently high.",
                     "editable": true,
@@ -7454,9 +7663,10 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 78
+                        "y": 30
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 198,
                     "legend": {
                         "alignAsTable": true,
@@ -7505,7 +7715,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -7531,7 +7741,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -7583,7 +7793,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 78
+                        "y": 30
                     },
                     "id": 204,
                     "links": [],
@@ -7628,7 +7838,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -7641,7 +7851,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -7666,7 +7876,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"regular\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -7684,7 +7894,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the number of assert events per second on average over the given time period. In most cases assertions are trivial, but you would want to check your log files if this counter spikes or is consistently high.",
                     "editable": true,
@@ -7703,9 +7913,10 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 86
+                        "y": 38
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 200,
                     "legend": {
                         "alignAsTable": true,
@@ -7754,7 +7965,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -7780,7 +7991,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -7832,7 +8043,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 86
+                        "y": 38
                     },
                     "id": 205,
                     "links": [],
@@ -7877,7 +8088,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -7890,7 +8101,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -7915,7 +8126,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"rollovers\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -7933,7 +8144,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the number of assert events per second on average over the given time period. In most cases assertions are trivial, but you would want to check your log files if this counter spikes or is consistently high.",
                     "editable": true,
@@ -7952,9 +8163,10 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 94
+                        "y": 46
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 201,
                     "legend": {
                         "alignAsTable": true,
@@ -8003,7 +8215,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -8029,7 +8241,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -8081,7 +8293,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 94
+                        "y": 46
                     },
                     "id": 206,
                     "links": [],
@@ -8126,7 +8338,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -8139,7 +8351,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -8164,7 +8376,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"user\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"user\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -8182,7 +8394,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "This panel shows the number of assert events per second on average over the given time period. In most cases assertions are trivial, but you would want to check your log files if this counter spikes or is consistently high.",
                     "editable": true,
@@ -8201,9 +8413,10 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 102
+                        "y": 54
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 199,
                     "legend": {
                         "alignAsTable": true,
@@ -8252,7 +8465,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m])))",
+                            "expr": "topk(5,avg by (service_name) ((rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -8278,7 +8491,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -8330,7 +8543,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 102
+                        "y": 54
                     },
                     "id": 207,
                     "links": [],
@@ -8375,7 +8588,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/mongodb-instance-summary/mongodb-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -8388,7 +8601,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -8413,7 +8626,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_mongod_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]) or\nrate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]) or\nrate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[$interval]) or \nirate(mongodb_asserts_total{service_name=~\"$service_name\",type=\"warning\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -8432,7 +8645,7 @@
         }
     ],
     "refresh": "1m",
-    "schemaVersion": 20,
+    "schemaVersion": 26,
     "style": "dark",
     "tags": [
         "MongoDB",
@@ -8447,7 +8660,8 @@
                 "auto_count": 200,
                 "auto_min": "1s",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
+                "error": null,
                 "hide": 0,
                 "includeAll": false,
                 "label": "Interval",
@@ -8502,11 +8716,35 @@
                 "type": "interval"
             },
             {
-                "allFormat": "blob",
-                "allValue": null,
+                "allValue": ".*",
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "",
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
+                "error": null,
+                "hide": 0,
+                "includeAll": true,
+                "label": "Environment",
+                "multi": true,
+                "name": "environment",
+                "options": [],
+                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allFormat": "blob",
+                "allValue": ".*",
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values(mongodb_up{environment=~\"$environment\"},cluster)",
+                "error": null,
                 "hide": 0,
                 "includeAll": true,
                 "label": "Cluster",
@@ -8514,11 +8752,11 @@
                 "multiFormat": "glob",
                 "name": "cluster",
                 "options": [],
-                "query": "label_values(mongodb_up,cluster)",
+                "query": "label_values(mongodb_up{environment=~\"$environment\"},cluster)",
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": null,
                 "tags": [],
                 "tagsQuery": null,
@@ -8529,8 +8767,9 @@
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "",
+                "datasource": "Metrics",
+                "definition": "label_values(mongodb_up{environment=~\"$environment\",cluster=~\"$cluster\"}, node_name)",
+                "error": null,
                 "hide": 0,
                 "includeAll": true,
                 "label": "Node Name",
@@ -8538,11 +8777,11 @@
                 "multiFormat": "glob",
                 "name": "node_name",
                 "options": [],
-                "query": "label_values(mongodb_up{cluster=~\"$cluster\"}, node_name)",
+                "query": "label_values(mongodb_up{environment=~\"$environment\",cluster=~\"$cluster\"}, node_name)",
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": null,
                 "tags": [],
                 "tagsQuery": "",
@@ -8553,8 +8792,9 @@
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "",
+                "datasource": "Metrics",
+                "definition": "label_values(mongodb_up{environment=~\"$environment\",cluster=~\"$cluster\",node_name=~\"$node_name\"}, service_name)",
+                "error": null,
                 "hide": 0,
                 "includeAll": true,
                 "label": "Service Name",
@@ -8562,11 +8802,11 @@
                 "multiFormat": "glob",
                 "name": "service_name",
                 "options": [],
-                "query": "label_values(mongodb_up{cluster=~\"$cluster\",node_name=~\"$node_name\"}, service_name)",
+                "query": "label_values(mongodb_up{environment=~\"$environment\",cluster=~\"$cluster\",node_name=~\"$node_name\"}, service_name)",
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": null,
                 "tags": [],
                 "tagsQuery": "",
@@ -8576,30 +8816,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
-                "hide": 2,
-                "includeAll": true,
-                "label": "Environment",
-                "multi": true,
-                "name": "environment",
-                "options": [],
-                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
-                "refresh": 2,
-                "regex": "",
-                "skipUrlSync": false,
-                "sort": 0,
-                "tagValuesQuery": "",
-                "tags": [],
-                "tagsQuery": "",
-                "type": "query",
-                "useTags": false
-            },
-            {
-                "allValue": null,
-                "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Replication Set",
@@ -8610,7 +8829,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -8620,8 +8839,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Database",
@@ -8629,10 +8849,10 @@
                 "name": "database",
                 "options": [],
                 "query": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -8642,8 +8862,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Type",
@@ -8651,10 +8872,10 @@
                 "name": "node_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -8664,8 +8885,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Type",
@@ -8673,10 +8895,56 @@
                 "name": "service_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "error": null,
+                "hide": 2,
+                "includeAll": true,
+                "label": "Username",
+                "multi": true,
+                "name": "username",
+                "options": [],
+                "query": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "error": null,
+                "hide": 2,
+                "includeAll": true,
+                "label": "Schema",
+                "multi": true,
+                "name": "schema",
+                "options": [],
+                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",

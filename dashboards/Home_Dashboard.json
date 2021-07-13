@@ -16,7 +16,7 @@
     "gnetId": null,
     "graphTooltip": 1,
     "id": null,
-    "iteration": 1575638234190,
+    "iteration": 1588106907443,
     "links": [
         {
             "icon": "doc",
@@ -55,7 +55,7 @@
         },
         {
             "asDropdown": true,
-            "includeVars": true,
+            "includeVars": false,
             "keepTime": true,
             "tags": [
                 "PMM"
@@ -79,7 +79,6 @@
             "id": 999,
             "isRootDashboard": true,
             "links": [],
-            "options": {},
             "targets": [
                 {
                     "expr": "",
@@ -111,7 +110,7 @@
         },
         {
             "content": "<br>\n<div class=\"text-center dashboard-header\">\n<img src=\"/graph/public/plugins/pmm-app/img/pmm-logo.svg\" height=\"60px\" width=\"60px\">\n  <span>Percona Monitoring and Management</span>\n</div>",
-            "datasource": "Prometheus",
+            "datasource": null,
             "editable": true,
             "gridPos": {
                 "h": 3,
@@ -123,7 +122,6 @@
             "id": 1339,
             "links": [],
             "mode": "html",
-            "options": {},
             "style": {},
             "title": "",
             "transparent": true,
@@ -149,7 +147,7 @@
             "datasource": null,
             "gridPos": {
                 "h": 11,
-                "w": 12,
+                "w": 7,
                 "x": 0,
                 "y": 7
             },
@@ -157,31 +155,48 @@
             "id": 1021,
             "links": [],
             "mode": "markdown",
-            "options": {},
             "title": "",
             "type": "text"
         },
         {
             "datasource": null,
+            "description": "",
+            "gridPos": {
+                "h": 11,
+                "w": 7,
+                "x": 7,
+                "y": 7
+            },
+            "id": 1396,
+            "options": {
+                "feedUrl": "/percona-blog/feed"
+            },
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Percona News",
+            "type": "news"
+        },
+        {
+            "datasource": null,
+            "description": "",
             "folderId": 0,
             "gridPos": {
                 "h": 11,
-                "w": 6,
-                "x": 12,
+                "w": 4,
+                "x": 14,
                 "y": 7
             },
             "headings": false,
             "height": "330px",
             "id": 1020,
-            "limit": 3,
+            "limit": 5,
             "links": [],
-            "options": {},
             "query": "",
             "recent": true,
             "search": false,
             "starred": true,
             "tags": [],
-            "title": "Starred and Recently used Dashboards",
+            "title": "Starred & Recently used Dashboards",
             "type": "dashlist"
         },
         {
@@ -193,7 +208,7 @@
                 "#1F60C4",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "editable": true,
             "error": false,
@@ -207,7 +222,7 @@
             },
             "gridPos": {
                 "h": 3,
-                "w": 6,
+                "w": 3,
                 "x": 18,
                 "y": 7
             },
@@ -229,11 +244,10 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
-            "postfixFontSize": "100%",
+            "postfixFontSize": "80%",
             "prefix": "",
-            "prefixFontSize": "100%",
+            "prefixFontSize": "80%",
             "rangeMaps": [
                 {
                     "from": "null",
@@ -250,15 +264,15 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "count(count by (node_name) (up{node_name=~\"$node_name\"})) or vector(0)",
+                    "expr": "count(count by (node_name) (up{node_name=~\"$node_name\",environment=~\"$environment\"})) or vector(0)",
                     "interval": "$interval",
                     "refId": "C"
                 }
             ],
             "thresholds": "",
-            "title": "Nodes under monitoring",
+            "title": "Monitored nodes",
             "type": "singlestat",
-            "valueFontSize": "100%",
+            "valueFontSize": "80%",
             "valueMaps": [
                 {
                     "op": "=",
@@ -277,7 +291,7 @@
                 "#1F60C4",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "editable": true,
             "error": false,
@@ -291,9 +305,9 @@
             },
             "gridPos": {
                 "h": 3,
-                "w": 6,
-                "x": 18,
-                "y": 10
+                "w": 3,
+                "x": 21,
+                "y": 7
             },
             "height": "50",
             "id": 1336,
@@ -313,7 +327,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "100%",
             "prefix": "",
@@ -334,7 +347,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "count(count by (id_service) (label_replace(up{node_name=~\"$node_name\",job=~\"mysql.*|mongodb.*|postgres.*|proxysql.*\"}, \"id_service\", \"$2\", \"job\", \"(.*)_exporter_agent_id_(.*)_(.*)\"))) or vector(0)",
+                    "expr": "count(count by (id_service) (label_replace(up{node_name=~\"$node_name\",job=~\"mysql.*|mongodb.*|postgres.*|proxysql.*\",environment=~\"$environment\"}, \"id_service\", \"$2\", \"job\", \"(.*)_exporter_agent_id_(.*)_(.*)\"))) or vector(0)",
                     "interval": "$interval",
                     "refId": "A"
                 }
@@ -342,12 +355,29 @@
             "thresholds": "",
             "title": "Monitored DB Services",
             "type": "singlestat",
-            "valueFontSize": "100%",
+            "valueFontSize": "80%",
             "valueMaps": [],
             "valueName": "current"
         },
         {
-            "datasource": "Prometheus",
+            "datasource": null,
+            "description": "Display the number of database security checks that the Security Threat Tool identified as failed during its most recent run.",
+            "gridPos": {
+                "h": 3,
+                "w": 6,
+                "x": 18,
+                "y": 10
+            },
+            "id": 1381,
+            "interval": null,
+            "links": [],
+            "options": {},
+            "targets": [],
+            "title": "Failed security checks",
+            "type": "pmm-check-panel-home"
+        },
+        {
+            "datasource": null,
             "gridPos": {
                 "h": 5,
                 "w": 6,
@@ -357,7 +387,6 @@
             "height": "120px",
             "id": 1337,
             "links": [],
-            "options": {},
             "targets": [
                 {
                     "expr": "",
@@ -366,8 +395,8 @@
                     "refId": "A"
                 }
             ],
-            "title": "",
-            "type": "pmm-update-panel"
+            "title": "PMM Upgrade",
+            "type": "pmm-update"
         },
         {
             "collapsed": false,
@@ -402,7 +431,6 @@
                 }
             ],
             "mode": "html",
-            "options": {},
             "title": "Host",
             "type": "text"
         },
@@ -453,7 +481,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -470,13 +497,13 @@
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
                 "show": true,
-                "ymax": null,
-                "ymin": null
+                "ymax": 100,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "avg by () ((sum by (node_name,cpu) ( (clamp_max(rate(node_cpu_seconds_total{node_name=~\"$node_name\",mode!='idle',mode!=\"iowait\"}[$interval]),1)) or  (clamp_max(irate(node_cpu_seconds_total{node_name=~\"$node_name\",mode!='idle',mode!=\"iowait\"}[5m]),1)) ))*100 or sum by () (avg_over_time(node_cpu_average{node_name=~\"$node_name\",mode!=\"idle\", mode!=\"total\",mode!=\"idle\"}[$interval]) or avg_over_time(node_cpu_average{node_name=~\"$node_name\",mode!=\"idle\",mode!=\"total\",mode!=\"idle\"}[5m])))",
+                    "expr": "avg by () (\n(sum by (node_name,cpu) ( (clamp_max(rate(node_cpu_seconds_total{node_name=~\"$node_name\",mode!='idle',mode!=\"iowait\"}[$interval]),1)) or  (clamp_max(irate(node_cpu_seconds_total{node_name=~\"$node_name\",mode!='idle',mode!=\"iowait\"}[5m]),1)) ))*100 or sum by () (avg_over_time(node_cpu_average{node_name=~\"$node_name\",mode!=\"idle\", mode!=\"total\"}[$interval]) or avg_over_time(node_cpu_average{node_name=~\"$node_name\",mode!=\"idle\",mode!=\"total\"}[5m]))\n)",
                     "interval": "$interval",
                     "refId": "A"
                 }
@@ -543,7 +570,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -560,13 +586,15 @@
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
                 "show": true,
-                "ymax": null,
-                "ymin": null
+                "ymax": 100,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "avg by () ((node_memory_MemAvailable_bytes{node_name=~\"$node_name\"} or (node_memory_MemFree_bytes{node_name=~\"$node_name\"} + node_memory_Buffers_bytes{node_name=~\"$node_name\"} + node_memory_Cached_bytes{node_name=~\"$node_name\"})) / node_memory_MemTotal_bytes{node_name=~\"$node_name\"} or\n(rdsosmetrics_memory_free{node_name=~\"$node_name\"} + rdsosmetrics_memory_buffers{node_name=~\"$node_name\"} + rdsosmetrics_memory_cached{node_name=~\"$node_name\"})/ rdsosmetrics_memory_total{node_name=~\"$node_name\"}) * 100",
+                    "expr": "avg by () (\n(node_memory_MemAvailable_bytes{node_name=~\"$node_name\"} or (node_memory_MemFree_bytes{node_name=~\"$node_name\"} + node_memory_Buffers_bytes{node_name=~\"$node_name\"} + node_memory_Cached_bytes{node_name=~\"$node_name\"})) * 100/ node_memory_MemTotal_bytes{node_name=~\"$node_name\"} or\n(rdsosmetrics_memory_free{node_name=~\"$node_name\"} + rdsosmetrics_memory_buffers{node_name=~\"$node_name\"} + rdsosmetrics_memory_cached{node_name=~\"$node_name\"}) * 100 / rdsosmetrics_memory_total{node_name=~\"$node_name\"} or (100 - azure_memory_percent_average{node_name=~\"$node_name\"})\n)",
+                    "interval": "$interval",
+                    "legendFormat": "",
                     "refId": "B"
                 }
             ],
@@ -594,7 +622,7 @@
                 "#1f78c1",
                 "#5195ce"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
             "editable": true,
             "error": false,
@@ -636,7 +664,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -686,7 +713,7 @@
                 "#962d82",
                 "#ba43a9"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
             "editable": true,
             "error": false,
@@ -727,7 +754,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -777,7 +803,7 @@
                 "#fce2de",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
             "editable": true,
             "error": false,
@@ -818,7 +844,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -876,7 +901,7 @@
                 "#7eb26d",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": null,
             "editable": true,
             "error": false,
@@ -928,7 +953,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -951,7 +975,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "sum by () (max_over_time(mysql_global_status_threads_connected{node_name=~\"$node_name\"}[$interval]) or \nmax_over_time(mongodb_connections{node_name=~\"$node_name\",state=\"current\"}[$interval]) or\nsum by (node_name) (max_over_time(pg_stat_database_numbackends{node_name=~\"$node_name\"}[$interval])))",
+                    "expr": "sum by () (max_over_time(mysql_global_status_threads_connected{node_name=~\"$node_name\",environment=~\"$environment\"}[$interval]) or \nmax_over_time(mongodb_connections{node_name=~\"$node_name\",state=\"current\",environment=~\"$environment\"}[$interval]) or\nsum by (node_name) (max_over_time(pg_stat_database_numbackends{node_name=~\"$node_name\",environment=~\"$environment\"}[$interval])))",
                     "interval": "$interval",
                     "refId": "C"
                 }
@@ -978,7 +1002,7 @@
                 "#7eb26d",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -1030,7 +1054,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1056,7 +1079,7 @@
                     "calculatedInterval": "10m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "sum by () (\n(rate(mysql_global_status_queries{node_name=~\"$node_name\"}[$interval]) or \nirate(mysql_global_status_queries{node_name=~\"$node_name\"}[5m])) or \n(sum(rate(mongodb_mongod_op_counters_total{node_name=~\"$node_name\",type!=\"command\"}[$interval])) or \nsum(irate(mongodb_mongod_op_counters_total{node_name=~\"$node_name\",type!=\"command\"}[5m]))) or\n(sum(rate(pg_stat_database_xact_commit{node_name=~\"$node_name\"}[$interval]) + \nrate(pg_stat_database_xact_rollback{node_name=~\"$node_name\"}[$interval])) or\nsum(irate(pg_stat_database_xact_commit{node_name=~\"$node_name\"}[5m]) + \nirate(pg_stat_database_xact_rollback{node_name=~\"$node_name\"}[5m])))\n)",
+                    "expr": "sum by () (\n(rate(mysql_global_status_queries{node_name=~\"$node_name\",environment=~\"$environment\"}[5m]) or \nirate(mysql_global_status_queries{node_name=~\"$node_name\",environment=~\"$environment\"}[5m])) or \n(rate(mongodb_op_counters_total{node_name=~\"$node_name\",type!=\"command\",environment=~\"$environment\"}[5m]) or \nirate(mongodb_op_counters_total{node_name=~\"$node_name\",type!=\"command\",environment=~\"$environment\"}[5m])) or\n((rate(pg_stat_database_xact_commit{node_name=~\"$node_name\",environment=~\"$environment\"}[5m]) + \nrate(pg_stat_database_xact_rollback{node_name=~\"$node_name\",environment=~\"$environment\"}[5m])) or\n(irate(pg_stat_database_xact_commit{node_name=~\"$node_name\",environment=~\"$environment\"}[5m]) + \nirate(pg_stat_database_xact_rollback{node_name=~\"$node_name\",environment=~\"$environment\"}[5m])))\n)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1088,7 +1111,7 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "editable": true,
             "error": false,
             "format": "none",
@@ -1128,7 +1151,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1181,8 +1203,9 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
+            "description": "RAM (Random Access Memory) is the hardware in a computing device where the operating system, application programs and data in current use are kept so they can be quickly reached by the device's processor.",
             "editable": true,
             "error": false,
             "format": "bytes",
@@ -1222,7 +1245,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1310,7 +1332,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "s",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1364,7 +1385,7 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
             "description": "Minimal Uptime for `All`",
             "editable": true,
@@ -1406,7 +1427,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "s",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1430,9 +1450,9 @@
                     "calculatedInterval": "10m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "min(mysql_global_status_uptime{node_name=~\"$node_name\"} or \nmongodb_instance_uptime_seconds {node_name=~\"$node_name\"} or \n(time() - process_start_time_seconds{node_name=~\"$node_name\",job=~\"postgres_exporter.*\"}))",
+                    "expr": "min(mysql_global_status_uptime{node_name=~\"$node_name\",environment=~\"$environment\"} or \nmongodb_instance_uptime_seconds {node_name=~\"$node_name\",environment=~\"$environment\"} or \n(pg_postmaster_uptime_seconds{node_name=~\"$node_name\",environment=~\"$environment\"}))",
                     "format": "time_series",
-                    "instant": false,
+                    "instant": true,
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "",
@@ -1489,7 +1509,6 @@
             ],
             "maxPerRow": 12,
             "mode": "markdown",
-            "options": {},
             "title": "",
             "transparent": true,
             "type": "text"
@@ -1541,7 +1560,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1558,8 +1576,8 @@
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
                 "show": true,
-                "ymax": null,
-                "ymin": null
+                "ymax": 100,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
@@ -1631,7 +1649,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1648,13 +1665,13 @@
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
                 "show": true,
-                "ymax": null,
-                "ymin": null
+                "ymax": 100,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "((node_memory_MemAvailable_bytes{node_name=~\"$node_name\"} or (node_memory_MemFree_bytes{node_name=~\"$node_name\"} + node_memory_Buffers_bytes{node_name=~\"$node_name\"} + node_memory_Cached_bytes{node_name=~\"$node_name\"})) / node_memory_MemTotal_bytes{node_name=~\"$node_name\"} or\n(rdsosmetrics_memory_free{node_name=~\"$node_name\"} + rdsosmetrics_memory_buffers{node_name=~\"$node_name\"} + rdsosmetrics_memory_cached{node_name=~\"$node_name\"})/ rdsosmetrics_memory_total{node_name=~\"$node_name\"}) * 100",
+                    "expr": "avg(((node_memory_MemAvailable_bytes{node_name=~\"$node_name\"} or (node_memory_MemFree_bytes{node_name=~\"$node_name\"} + node_memory_Buffers_bytes{node_name=~\"$node_name\"} + node_memory_Cached_bytes{node_name=~\"$node_name\"})) / node_memory_MemTotal_bytes{node_name=~\"$node_name\"} or\n(rdsosmetrics_memory_free{node_name=~\"$node_name\"} + rdsosmetrics_memory_buffers{node_name=~\"$node_name\"} + rdsosmetrics_memory_cached{node_name=~\"$node_name\"})/ rdsosmetrics_memory_total{node_name=~\"$node_name\"}) * 100 or (100 - azure_memory_percent_average{node_name=~\"$node_name\"}))",
                     "interval": "$interval",
                     "refId": "A"
                 }
@@ -1683,7 +1700,7 @@
                 "#1f78c1",
                 "#5195ce"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
             "editable": true,
             "error": false,
@@ -1725,7 +1742,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1749,7 +1765,7 @@
                     "calculatedInterval": "10m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(node_vmstat_pgpgin{node_name=~\"$node_name\"}[$interval]) or irate(node_vmstat_pgpgin{node_name=~\"$node_name\"}[5m]) or sum by (node_name) (max_over_time(rdsosmetrics_diskIO_readKbPS{node_name=~\"$node_name\"}[$interval]) or max_over_time(rdsosmetrics_diskIO_readKbPS{node_name=~\"$node_name\"}[5m]))) * 1024",
+                    "expr": "avg((rate(node_vmstat_pgpgin{node_name=~\"$node_name\"}[$interval]) or irate(node_vmstat_pgpgin{node_name=~\"$node_name\"}[5m]) or sum by (node_name) (max_over_time(rdsosmetrics_diskIO_readKbPS{node_name=~\"$node_name\"}[$interval]) or max_over_time(rdsosmetrics_diskIO_readKbPS{node_name=~\"$node_name\"}[5m]))) * 1024)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1781,7 +1797,7 @@
                 "#962d82",
                 "#ba43a9"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
             "editable": true,
             "error": false,
@@ -1823,7 +1839,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1847,7 +1862,7 @@
                     "calculatedInterval": "10m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "(rate(node_vmstat_pgpgout{node_name=~\"$node_name\"}[$interval]) or irate(node_vmstat_pgpgout{node_name=~\"$node_name\"}[5m]) or\nsum by (node_name) (max_over_time(rdsosmetrics_diskIO_writeKbPS{node_name=~\"$node_name\"}[$interval]) or max_over_time(rdsosmetrics_diskIO_writeKbPS{node_name=~\"$node_name\"}[5m]))) * 1024",
+                    "expr": "avg((rate(node_vmstat_pgpgout{node_name=~\"$node_name\"}[$interval]) or irate(node_vmstat_pgpgout{node_name=~\"$node_name\"}[5m]) or\nsum by (node_name) (max_over_time(rdsosmetrics_diskIO_writeKbPS{node_name=~\"$node_name\"}[$interval]) or max_over_time(rdsosmetrics_diskIO_writeKbPS{node_name=~\"$node_name\"}[5m]))) * 1024)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1879,7 +1894,7 @@
                 "#fce2de",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
             "editable": true,
             "error": false,
@@ -1920,7 +1935,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1976,7 +1990,7 @@
                 "#7eb26d",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": null,
             "editable": true,
             "error": false,
@@ -2028,7 +2042,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2049,7 +2062,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "sum by()(max_over_time(mysql_global_status_threads_connected{node_name=~\"$node_name\"}[$interval]) or \nlabel_replace(mysql_global_status_threads_connected{node_name=~\"$node_name\",node_type=\"remote\"},\"node_name\",\"pmm-server\",\"\",\"\") or\nmax_over_time(mongodb_connections{node_name=~\"$node_name\",state=\"current\"}[$interval]) or\nsum by (node_name) (max_over_time(pg_stat_database_numbackends{node_name=~\"$node_name\"}[$interval])))",
+                    "expr": "sum by()(max_over_time(mysql_global_status_threads_connected{node_name=~\"$node_name\",environment=~\"$environment\"}[$interval]) or \nlabel_replace(mysql_global_status_threads_connected{node_name=~\"$node_name\",node_type=\"remote\",environment=~\"$environment\"},\"node_name\",\"pmm-server\",\"\",\"\") or\nmax_over_time(mongodb_connections{node_name=~\"$node_name\",state=\"current\",environment=~\"$environment\"}[$interval]) or\nsum by (node_name) (max_over_time(pg_stat_database_numbackends{node_name=~\"$node_name\",environment=~\"$environment\"}[$interval])))",
                     "interval": "$interval",
                     "refId": "B"
                 }
@@ -2076,7 +2089,7 @@
                 "#7eb26d",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -2128,7 +2141,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2152,7 +2164,7 @@
                     "calculatedInterval": "10m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "sum by (node_name) (\n(rate(mysql_global_status_queries{node_name=~\"$node_name\"}[$interval]) or \nirate(mysql_global_status_queries{node_name=~\"$node_name\"}[5m])) or \n(sum by (node_name) (rate(mongodb_mongod_op_counters_total{node_name=~\"$node_name\",type!=\"command\"}[$interval])) or \nsum by (node_name) (irate(mongodb_mongod_op_counters_total{node_name=~\"$node_name\",type!=\"command\"}[5m]))) or\n(sum by (node_name) (rate(pg_stat_database_xact_commit{node_name=~\"$node_name\"}[$interval]) + \nrate(pg_stat_database_xact_rollback{node_name=~\"$node_name\"}[$interval])) or\nsum by (node_name) (irate(pg_stat_database_xact_commit{node_name=~\"$node_name\"}[5m]) + \nirate(pg_stat_database_xact_rollback{node_name=~\"$node_name\"}[5m])))\n)",
+                    "expr": "sum by (node_name) (\n(rate(mysql_global_status_queries{node_name=~\"$node_name\",environment=~\"$environment\"}[5m]) or \nirate(mysql_global_status_queries{node_name=~\"$node_name\",environment=~\"$environment\"}[5m])) or \n(rate(mongodb_op_counters_total{node_name=~\"$node_name\",type!=\"command\",environment=~\"$environment\"}[5m]) or \nirate(mongodb_op_counters_total{node_name=~\"$node_name\",type!=\"command\",environment=~\"$environment\"}[5m])) or\n((rate(pg_stat_database_xact_commit{node_name=~\"$node_name\",environment=~\"$environment\"}[5m]) + \nrate(pg_stat_database_xact_rollback{node_name=~\"$node_name\",environment=~\"$environment\"}[5m])) or\n(irate(pg_stat_database_xact_commit{node_name=~\"$node_name\",environment=~\"$environment\"}[5m]) + \nirate(pg_stat_database_xact_rollback{node_name=~\"$node_name\",environment=~\"$environment\"}[5m])))\n)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -2184,7 +2196,7 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "editable": true,
             "error": false,
             "format": "none",
@@ -2225,7 +2237,6 @@
             "maxPerRow": 12,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2283,7 +2294,7 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
@@ -2324,7 +2335,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2345,7 +2355,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "node_memory_MemTotal_bytes{node_name=~\"$node_name\"} or (rdsosmetrics_memory_total{node_name=~\"$node_name\"}*1024)",
+                    "expr": "avg(node_memory_MemTotal_bytes{node_name=~\"$node_name\"} or (rdsosmetrics_memory_total{node_name=~\"$node_name\"}*1024))",
                     "interval": "$interval",
                     "refId": "A"
                 }
@@ -2373,9 +2383,9 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
-            "description": "Uptime for  `$node_name`",
+            "description": "Uptime for `$node_name`",
             "editable": true,
             "error": false,
             "format": "s",
@@ -2398,7 +2408,7 @@
             "links": [
                 {
                     "title": "Node Summary - $node_name",
-                    "url": "/graph/d/node-instance-summary/node-summary?$__url_time_range&var-node_name=$node_name"
+                    "url": "/graph/d/node-instance-summary/node-summary?var-node_name=$node_name&$__url_time_range"
                 }
             ],
             "mappingType": 1,
@@ -2415,7 +2425,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "s",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2473,7 +2482,7 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 1,
             "description": "DB Uptime for $node_name",
             "editable": true,
@@ -2498,7 +2507,7 @@
             "links": [
                 {
                     "title": "Node Summary - $node_name",
-                    "url": "/graph/d/node-instance-summary/node-summary?$__url_time_range&var-node_name=$node_name"
+                    "url": "/graph/d/node-instance-summary/node-summary?var-node_name=$node_name&$__url_time_range"
                 }
             ],
             "mappingType": 1,
@@ -2515,7 +2524,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "s",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2539,8 +2547,9 @@
                     "calculatedInterval": "10m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "min by (node_name) (mysql_global_status_uptime{node_name=~\"$node_name\"} or \nmongodb_instance_uptime_seconds {node_name=~\"$node_name\"} or \n(time() - process_start_time_seconds{node_name=~\"$node_name\",job=~\"postgres_exporter.*\"}))",
+                    "expr": "min by (node_name) (mysql_global_status_uptime{node_name=~\"$node_name\",environment=~\"$environment\"} or \nmongodb_instance_uptime_seconds {node_name=~\"$node_name\",environment=~\"$environment\"} or \n(pg_postmaster_uptime_seconds{node_name=~\"$node_name\",environment=~\"$environment\"}))",
                     "format": "time_series",
+                    "instant": true,
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "",
@@ -2564,7 +2573,7 @@
         }
     ],
     "refresh": "1m",
-    "schemaVersion": 20,
+    "schemaVersion": 22,
     "style": "dark",
     "tags": [
         "Percona",
@@ -2578,7 +2587,7 @@
                 "auto_count": 200,
                 "auto_min": "1s",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "hide": 0,
                 "includeAll": false,
                 "label": "Interval",
@@ -2633,12 +2642,13 @@
                 "type": "interval"
             },
             {
-                "allValue": null,
+                "allValue": ".*",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(up, environment)",
                 "hide": 0,
                 "includeAll": true,
+                "index": -1,
                 "label": "Environment",
                 "multi": true,
                 "name": "environment",
@@ -2647,7 +2657,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2658,21 +2668,22 @@
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values(up{environment=~\"$environment|\",node_type=~\"generic|remote_rds|container|remote\"}, node_name)",
+                "datasource": "Metrics",
+                "definition": "label_values(up{environment=~\"$environment\",node_type=~\"generic|remote_rds|container|remote|remote_azure_database\"}, node_name)",
                 "hide": 0,
                 "includeAll": true,
+                "index": -1,
                 "label": "Node Name",
                 "multi": true,
                 "multiFormat": "regex values",
                 "name": "node_name",
                 "options": [],
-                "query": "label_values(up{environment=~\"$environment|\",node_type=~\"generic|remote_rds|container|remote\"}, node_name)",
+                "query": "label_values(up{environment=~\"$environment\",node_type=~\"generic|remote_rds|container|remote|remote_azure_database\"}, node_name)",
                 "refresh": 2,
                 "refresh_on_load": false,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": "instance",
                 "tags": [],
                 "tagsQuery": "up",
@@ -2683,10 +2694,11 @@
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up\",node_name=~\"$node_name\"}, service_name)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Service Name",
                 "multi": true,
                 "multiFormat": "regex values",
@@ -2697,7 +2709,7 @@
                 "refresh_on_load": false,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": "instance",
                 "tags": [],
                 "tagsQuery": "up",
@@ -2707,10 +2719,11 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, cluster)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Cluster",
                 "multi": true,
                 "name": "cluster",
@@ -2719,7 +2732,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2729,10 +2742,11 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Replication Set",
                 "multi": true,
                 "name": "replication_set",
@@ -2741,7 +2755,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2751,19 +2765,20 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Database",
                 "multi": true,
                 "name": "database",
                 "options": [],
                 "query": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2773,10 +2788,11 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Type",
                 "multi": true,
                 "name": "node_type",
@@ -2785,7 +2801,7 @@
                 "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -2795,19 +2811,66 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
                 "hide": 2,
                 "includeAll": true,
+                "index": -1,
                 "label": "Type",
                 "multi": true,
                 "name": "service_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "hide": 2,
+                "includeAll": true,
+                "index": -1,
+                "label": "Username",
+                "multi": true,
+                "name": "username",
+                "options": [],
+                "query": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "hide": 2,
+                "includeAll": true,
+                "index": -1,
+                "label": "Schema",
+                "multi": true,
+                "name": "schema",
+                "options": [],
+                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",

@@ -2,37 +2,50 @@ export IMPORT_DASH_HOST = http://127.0.0.1:3000
 export IMPORT_DASH_USERNAME = admin
 export IMPORT_DASH_PASSWORD = admin
 
+.PHONY: all
 all: build pack disable install enable
 	tput bel
 
-build:
-	cd pmm-app && npm i && npm run build && cd ..
-
+.PHONY: coverage
 coverage:
-	cd pmm-app && npm i && npm run coverage && npm run build && cd ..
+	cd pmm-app \
+	&& npm run coverage
 
-pack:
-	tar czf pmm-app.tar.gz pmm-app
+.PHONY: codecov
+codecov:
+	cd pmm-app \
+	&& npm run codecov
 
+.PHONY: release
 release:
-	cd pmm-app && npm version
-	cd pmm-app && npm i
-	cd pmm-app && npm run build
+	cd pmm-app \
+	&& npm version \
+	&& npm ci \
+	&& npm run build
 
-install:
-	docker exec pmm-server supervisorctl stop grafana
-	docker exec pmm-server bash -c 'rm -rf /var/lib/grafana/plugins/pmm-*'
-	docker cp pmm-app.tar.gz  pmm-server:/var/lib/grafana/plugins/
-	docker exec pmm-server bash -c 'cd /var/lib/grafana/plugins/ && tar xzf pmm-app.tar.gz'
-	docker exec pmm-server supervisorctl start grafana
+.PHONY: prepare_release
+prepare_release:
+	cd pmm-app \
+	&& npm version \
+	&& npm ci \
 
-disable:
-	curl -X POST 'http://admin:admin@localhost/graph/api/plugins/pmm-app/settings' -d 'enabled=false'
+.PHONY: build_package
+build_package:
+	cd pmm-app \
+	&& npm run build
 
-enable:
-	curl -X POST --retry-delay 5 --retry 5 'http://admin:admin@localhost/graph/api/plugins/pmm-app/settings' -d 'enabled=true'
+.PHONY: generate_coverage
+generate_coverage: coverage codecov
 
-test: coverage build pack disable install enable
+.PHONY: test
+test: release coverage codecov
 
+.PHONY: clean
 clean:
 	rm -r pmm-app/dist/
+
+.PHONY: docker_clean
+docker_clean:
+	docker-compose stop \
+	&& docker-compose rm -f -v \
+	&& docker system prune --volumes -f

@@ -13,8 +13,7 @@
                 "showIn": 0,
                 "tags": [
                     "pmm_annotation",
-                    "$node_name",
-                    "$service_name"
+                    "$node_name"
                 ],
                 "type": "tags"
             },
@@ -36,7 +35,7 @@
     "gnetId": null,
     "graphTooltip": 1,
     "id": null,
-    "iteration": 1574020921489,
+    "iteration": 1605889749989,
     "links": [
         {
             "icon": "doc",
@@ -75,7 +74,7 @@
         },
         {
             "asDropdown": true,
-            "includeVars": true,
+            "includeVars": false,
             "keepTime": true,
             "tags": [
                 "PMM"
@@ -89,6 +88,12 @@
         {
             "breadcrumbItemsMaxAmount": 6,
             "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "gridPos": {
                 "h": 2,
                 "w": 24,
@@ -99,7 +104,6 @@
             "id": 999,
             "isRootDashboard": false,
             "links": [],
-            "options": {},
             "targets": [
                 {
                     "expr": "",
@@ -138,8 +142,15 @@
                 "rgba(237, 129, 40, 0.89)",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
+            "decimals": 2,
             "description": "Shows the average CPU usage in percent per host for all exporters. An Exporter is a software library that provides metrics to PMM.\n\nNote that the CPU usage is only the CPU usage of the exporter itself. It does not include the additional resource usage that is required to produce metrics by the application or operating system.\n\nSee also:",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "percent",
             "gauge": {
                 "maxValue": 100,
@@ -182,7 +193,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -199,22 +209,20 @@
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
                 "show": true,
-                "ymax": null,
-                "ymin": null
+                "ymax": 100,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "avg((sum(rate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[$interval])) by (node_name) or \nsum(irate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[5m])) by (node_name)) / \ncount(node_cpu_seconds_total{mode=\"user\",node_name=~\"$node_name\"}) by (node_name)) by ()*100",
-                    "format": "time_series",
-                    "interval": "$interval",
-                    "intervalFactor": 1,
+                    "expr": "avg((sum(rate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[$interval]) or irate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[5m]) or\nlabel_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[$interval]),\"node_name\",\"pmm-server\",\"\",\"\") or\nlabel_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[5m]),\"node_name\",\"pmm-server\",\"\",\"\")) by (node_name)) / \ncount(node_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}) by (node_name) * 100 or\nsum by (node_name) ((max_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[$interval]) or \nmax_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[5m]))))",
+                    "interval": "",
                     "legendFormat": "",
-                    "refId": "A"
+                    "refId": "B"
                 }
             ],
             "thresholds": "5,20",
-            "title": "Avg CPU Usage per Host",
+            "title": "Avg CPU Usage per Node",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -235,11 +243,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
-            "decimals": 0,
+            "datasource": null,
+            "decimals": 2,
             "description": "Shows the Exporters average Memory usage per host. An Exporter is a software library that provides metrics to PMM.\n\nNote that the Memory usage is only the Memory usage of the exporter itself. It does not include the additional memory usage that is required to produce metrics by the application or operating system.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "bytes",
             "gauge": {
                 "maxValue": 100,
@@ -283,7 +297,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -304,21 +317,13 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "calculatedInterval": "10m",
-                    "datasourceErrors": {},
-                    "errors": {},
-                    "expr": "avg(sum(process_resident_memory_bytes{job=~\".*exporter.*\",node_name=~\"$node_name\"}) by (node_name))",
-                    "format": "time_series",
-                    "interval": "$interval",
-                    "intervalFactor": 1,
-                    "legendFormat": "",
-                    "metric": "node_mem",
-                    "refId": "A",
-                    "step": 300
+                    "expr": "avg(sum(\nmax_over_time(process_resident_memory_bytes{job=~\".*exporter.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[$interval]) or max_over_time(process_resident_memory_bytes{job=~\".*exporter.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[5m]) or\n(sum by (node_name) (label_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[$interval]),\"node_name\",\"pmm-server\",\"\",\"\") or\nlabel_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[5m]),\"node_name\",\"pmm-server\",\"\",\"\"))) * count by (node_name) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"node_name\", \"pmm-server\", \"\", \"\"))\n) by (node_name))",
+                    "hide": false,
+                    "refId": "B"
                 }
             ],
-            "thresholds": "50000000,100000000",
-            "title": "Avg Memory Usage per Host",
+            "thresholds": "100000000,200000000",
+            "title": "Avg Memory Usage per Node",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [],
@@ -333,11 +338,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "Shows the number of monitored hosts that are running Exporters. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "short",
             "gauge": {
                 "maxValue": 100,
@@ -381,7 +392,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -416,7 +426,7 @@
                 }
             ],
             "thresholds": "512,800",
-            "title": "Monitored Hosts",
+            "title": "Monitored Nodes",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [],
@@ -431,11 +441,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "Shows the total number of Exporters running with this PMM Server instance. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "short",
             "gauge": {
                 "maxValue": 100,
@@ -479,7 +495,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -503,8 +518,9 @@
                     "calculatedInterval": "10m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "count(process_open_fds{job=~\".*exporter.*\",node_name=~\"$node_name\"}) ",
+                    "expr": "sum(count by (agent_type) (process_cpu_seconds_total{node_name=~\"$node_name\"}) or count by (agent_type) (label_replace(label_replace(process_cpu_seconds_total{job=~\"rds.*\"},\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\"))  * count by (agent_type) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\")))",
                     "format": "time_series",
+                    "instant": true,
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "",
@@ -532,7 +548,7 @@
             "id": 2218,
             "panels": [],
             "repeat": null,
-            "title": "Prometheus Exporters Resource Usage by Host",
+            "title": "Prometheus Exporters Resource Usage by Node",
             "type": "row"
         },
         {
@@ -540,9 +556,16 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "Plots the Exporters' CPU usage across each monitored host (by default, All hosts). An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "links": []
+                },
+                "overrides": []
+            },
             "fill": 2,
             "fillGradient": 0,
             "gridPos": {
@@ -551,6 +574,7 @@
                 "x": 0,
                 "y": 6
             },
+            "hiddenSeries": false,
             "id": 1613,
             "interval": "",
             "legend": {
@@ -581,9 +605,10 @@
             ],
             "nullPointMode": "null",
             "options": {
-                "dataLinks": []
+                "alertThreshold": true
             },
             "percentage": false,
+            "pluginVersion": "7.3.7",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -593,12 +618,11 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "(sum(rate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[$interval])) by (node_name) or \nsum(irate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[5m])) by (node_name)) / \ncount(node_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}) by (node_name) *100",
-                    "format": "time_series",
+                    "expr": "clamp_max((sum(rate(process_cpu_seconds_total{job=~\".*exporter.*|^vmagent.*\",node_name=~\"$node_name\"}[$interval]) or irate(process_cpu_seconds_total{job=~\".*exporter.*|^vmagent.*\",node_name=~\"$node_name\"}[5m]) or\nlabel_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[$interval]),\"node_name\",\"pmm-server\",\"\",\"\") or\nlabel_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[5m]),\"node_name\",\"pmm-server\",\"\",\"\")) by (node_name)) / \ncount(node_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}) by (node_name) *100 or\nsum by (node_name) ((max_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[$interval]) or \nmax_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[5m]))),100)",
+                    "hide": false,
                     "interval": "$interval",
-                    "intervalFactor": 1,
                     "legendFormat": "{{node_name}}",
-                    "refId": "A"
+                    "refId": "B"
                 }
             ],
             "thresholds": [],
@@ -608,7 +632,7 @@
             "title": "CPU Usage",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -621,6 +645,7 @@
             },
             "yaxes": [
                 {
+                    "$$hashKey": "object:376",
                     "decimals": 2,
                     "format": "percent",
                     "label": null,
@@ -630,6 +655,7 @@
                     "show": true
                 },
                 {
+                    "$$hashKey": "object:377",
                     "format": "short",
                     "label": null,
                     "logBase": 1,
@@ -648,9 +674,16 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "Plots the Exporters' Memory usage across each monitored host (by default, All hosts). An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "links": []
+                },
+                "overrides": []
+            },
             "fill": 2,
             "fillGradient": 0,
             "gridPos": {
@@ -659,6 +692,7 @@
                 "x": 12,
                 "y": 6
             },
+            "hiddenSeries": false,
             "id": 1914,
             "interval": "",
             "legend": {
@@ -689,9 +723,10 @@
             ],
             "nullPointMode": "null",
             "options": {
-                "dataLinks": []
+                "alertThreshold": true
             },
             "percentage": false,
+            "pluginVersion": "7.3.7",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -701,12 +736,10 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "sum(max_over_time(process_resident_memory_bytes{job=~\".*exporter.*\",node_name=~\"$node_name\"}[$interval]) or max_over_time(process_resident_memory_bytes{job=~\".*exporter.*\",node_name=~\"$node_name\"}[5m])) by (node_name)",
-                    "format": "time_series",
+                    "expr": "sum(\nmax_over_time(process_resident_memory_bytes{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[$interval]) or max_over_time(process_resident_memory_bytes{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[5m]) or\n(sum by (node_name) (label_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[$interval]),\"node_name\",\"pmm-server\",\"\",\"\") or\nlabel_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[5m]),\"node_name\",\"pmm-server\",\"\",\"\"))) * count by (node_name) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"node_name\", \"pmm-server\", \"\", \"\"))\n) by (node_name)",
                     "interval": "$interval",
-                    "intervalFactor": 1,
                     "legendFormat": "{{node_name}}",
-                    "refId": "A"
+                    "refId": "B"
                 }
             ],
             "thresholds": [],
@@ -716,7 +749,7 @@
             "title": "Memory Usage",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -729,6 +762,7 @@
             },
             "yaxes": [
                 {
+                    "$$hashKey": "object:448",
                     "decimals": 2,
                     "format": "bytes",
                     "label": null,
@@ -738,6 +772,7 @@
                     "show": true
                 },
                 {
+                    "$$hashKey": "object:449",
                     "format": "short",
                     "label": null,
                     "logBase": 1,
@@ -771,9 +806,16 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 3,
             "description": "Shows the Exporters' CPU Cores used for each type of Exporter. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "links": []
+                },
+                "overrides": []
+            },
             "fill": 2,
             "fillGradient": 0,
             "gridPos": {
@@ -782,6 +824,7 @@
                 "x": 0,
                 "y": 15
             },
+            "hiddenSeries": false,
             "id": 1915,
             "interval": "",
             "legend": {
@@ -812,9 +855,10 @@
             ],
             "nullPointMode": "null",
             "options": {
-                "dataLinks": []
+                "alertThreshold": true
             },
             "percentage": false,
+            "pluginVersion": "7.3.7",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -824,12 +868,14 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "(avg(rate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[$interval])) by (agent_type) or \navg(irate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[5m])) by (agent_type))",
-                    "format": "time_series",
+                    "expr": "sum by (agent_type) (rate(process_cpu_seconds_total{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[$interval]) or irate(process_cpu_seconds_total{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[5m]) or avg by (agent_type) (label_replace(label_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[$interval]),\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\") or label_replace(label_replace(irate(process_cpu_seconds_total{job=~\"rds.*\"}[5m]),\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\")) * count by (agent_type) (label_replace(process_cpu_seconds_total{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\"))\n)",
+                    "hide": false,
                     "interval": "$interval",
-                    "intervalFactor": 1,
                     "legendFormat": "{{agent_type}}",
-                    "refId": "A"
+                    "refId": "B"
+                },
+                {
+                    "refId": "C"
                 }
             ],
             "thresholds": [],
@@ -839,7 +885,7 @@
             "title": "CPU Cores Used",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -852,6 +898,7 @@
             },
             "yaxes": [
                 {
+                    "$$hashKey": "object:763",
                     "decimals": 3,
                     "format": "short",
                     "label": "",
@@ -861,6 +908,7 @@
                     "show": true
                 },
                 {
+                    "$$hashKey": "object:764",
                     "format": "short",
                     "label": null,
                     "logBase": 1,
@@ -879,9 +927,16 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "Shows the Exporters' memory used for each type of Exporter. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "links": []
+                },
+                "overrides": []
+            },
             "fill": 2,
             "fillGradient": 0,
             "gridPos": {
@@ -890,6 +945,7 @@
                 "x": 12,
                 "y": 15
             },
+            "hiddenSeries": false,
             "id": 2216,
             "interval": "",
             "legend": {
@@ -920,9 +976,10 @@
             ],
             "nullPointMode": "null",
             "options": {
-                "dataLinks": []
+                "alertThreshold": true
             },
             "percentage": false,
+            "pluginVersion": "7.3.7",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -932,12 +989,11 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "avg(max_over_time(process_resident_memory_bytes{job=~\".*exporter.*\",node_name=~\"$node_name\"}[$interval]) or max_over_time(process_resident_memory_bytes{job=~\".*exporter.*\",node_name=~\"$node_name\"}[5m])) by (agent_type)",
-                    "format": "time_series",
+                    "expr": "sum by (agent_type) (max_over_time(process_resident_memory_bytes{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[$interval]) or\nmax_over_time(process_resident_memory_bytes{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[5m]) or avg by (agent_type) (label_replace(label_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[$interval]),\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\") or label_replace(label_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[5m]),\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\")) * count by (agent_type) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\"))\n)",
+                    "hide": false,
                     "interval": "$interval",
-                    "intervalFactor": 1,
                     "legendFormat": "{{agent_type}}",
-                    "refId": "A"
+                    "refId": "B"
                 }
             ],
             "thresholds": [],
@@ -947,7 +1003,7 @@
             "title": "Memory Usage",
             "tooltip": {
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -960,6 +1016,7 @@
             },
             "yaxes": [
                 {
+                    "$$hashKey": "object:835",
                     "decimals": 2,
                     "format": "bytes",
                     "label": null,
@@ -969,6 +1026,7 @@
                     "show": true
                 },
                 {
+                    "$$hashKey": "object:836",
                     "format": "short",
                     "label": null,
                     "logBase": 1,
@@ -998,10 +1056,15 @@
             "type": "row"
         },
         {
-            "content": "$node_name",
             "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "gridPos": {
-                "h": 2,
+                "h": 4,
                 "w": 5,
                 "x": 0,
                 "y": 25
@@ -1025,9 +1088,12 @@
                     "url": "/graph/d/node-instance-summary/node-summary?$__url_time_range&$__all_variables"
                 }
             ],
-            "mode": "markdown",
-            "options": {},
-            "title": "Host",
+            "options": {
+                "content": "$node_name",
+                "mode": "markdown"
+            },
+            "pluginVersion": "7.3.7",
+            "title": "Node name",
             "type": "text"
         },
         {
@@ -1039,8 +1105,15 @@
                 "rgba(237, 129, 40, 0.89)",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
+            "decimals": 2,
             "description": "Show the CPU usage as a percentage for all Exporters on a per-host basis. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "percent",
             "gauge": {
                 "maxValue": 100,
@@ -1088,7 +1161,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1105,22 +1177,20 @@
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
                 "show": true,
-                "ymax": null,
-                "ymin": null
+                "ymax": 100,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "((sum(rate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[$interval])) by (node_name) \nor sum(irate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[5m])) by (node_name)) \n/ count(node_cpu_seconds_total{node_name=~\"$node_name\",mode=\"user\"}) by (node_name)*100) or \nsum by () ((max_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[$interval]) or \nmax_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[5m])))",
-                    "format": "time_series",
-                    "interval": "$interval",
-                    "intervalFactor": 1,
+                    "expr": "(sum(rate(process_cpu_seconds_total{job=~\".*exporter.*|^vmagent.*\",node_name=~\"$node_name\"}[$interval]) or irate(process_cpu_seconds_total{job=~\".*exporter.*|^vmagent.*\",node_name=~\"$node_name\"}[5m]) or\nlabel_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[$interval]),\"node_name\",\"pmm-server\",\"\",\"\") or\nlabel_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[5m]),\"node_name\",\"pmm-server\",\"\",\"\")) by (node_name)) / \ncount(node_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}) by (node_name) * 100 or\nsum by (node_name) ((max_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[$interval]) or \nmax_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[5m])))",
+                    "interval": "",
                     "legendFormat": "",
-                    "refId": "A"
+                    "refId": "B"
                 }
             ],
             "thresholds": "5,10",
-            "title": "CPU  Used",
+            "title": "CPU Used",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -1141,11 +1211,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
-            "decimals": null,
+            "datasource": null,
+            "decimals": 2,
             "description": "Shows total Memory Used by Exporters on a per-host basis. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "bytes",
             "gauge": {
                 "maxValue": 100,
@@ -1194,7 +1270,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1215,20 +1290,14 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "calculatedInterval": "10m",
-                    "datasourceErrors": {},
-                    "errors": {},
-                    "expr": "sum(process_resident_memory_bytes{job=~\".*exporter.*\",node_name=~\"$node_name\"}) by (node_name)",
-                    "format": "time_series",
+                    "expr": "sum(\nmax_over_time(process_resident_memory_bytes{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[$interval]) or max_over_time(process_resident_memory_bytes{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[5m]) or\n(sum by (node_name) (label_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[$interval]),\"node_name\",\"pmm-server\",\"\",\"\") or\nlabel_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[5m]),\"node_name\",\"pmm-server\",\"\",\"\"))) * count by (node_name) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"node_name\", \"pmm-server\", \"\", \"\"))\n) by (node_name)",
+                    "hide": false,
                     "interval": "$interval",
-                    "intervalFactor": 1,
                     "legendFormat": "",
-                    "metric": "node_mem",
-                    "refId": "A",
-                    "step": 300
+                    "refId": "B"
                 }
             ],
-            "thresholds": "50000000,100000000",
+            "thresholds": "100000000,200000000",
             "title": "Mem Used",
             "type": "singlestat",
             "valueFontSize": "50%",
@@ -1244,11 +1313,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "Shows the number of Exporters running on a per-host basis. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "short",
             "gauge": {
                 "maxValue": 100,
@@ -1297,7 +1372,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1323,12 +1397,20 @@
                     "errors": {},
                     "expr": "count(process_open_fds{job=~\".*exporter.*\",node_name=~\"$node_name\"}) ",
                     "format": "time_series",
+                    "hide": true,
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "",
                     "metric": "node_mem",
                     "refId": "A",
                     "step": 300
+                },
+                {
+                    "expr": "sum(count by (agent_type) (process_cpu_seconds_total{node_name=~\"$node_name\"}) or count by (agent_type) (label_replace(label_replace(process_cpu_seconds_total{job=~\"rds.*\"},\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\"))  * count by (agent_type) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\")))",
+                    "instant": true,
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "B"
                 }
             ],
             "thresholds": "512,800",
@@ -1341,6 +1423,12 @@
         {
             "columns": [],
             "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "fontSize": "100%",
             "gridPos": {
                 "h": 4,
@@ -1350,7 +1438,6 @@
             },
             "id": 2246,
             "links": [],
-            "options": {},
             "pageSize": null,
             "scroll": true,
             "showHeader": true,
@@ -1361,12 +1448,14 @@
             "styles": [
                 {
                     "alias": "Exporters",
+                    "align": "auto",
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
                     "pattern": "agent_type",
                     "type": "string"
                 },
                 {
                     "alias": "Amount",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1383,6 +1472,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1398,20 +1488,18 @@
             ],
             "targets": [
                 {
-                    "expr": "count(process_cpu_seconds_total{node_name=~\"$node_name\"}) by (agent_type)",
+                    "expr": "sum by (agent_type) (count by (agent_type) (process_cpu_seconds_total{node_name=~\"$node_name\"}) or count by (agent_type) (label_replace(label_replace(process_cpu_seconds_total{job=~\"rds.*\"},\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\"))  * count by (agent_type) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\")))",
                     "format": "table",
+                    "hide": false,
                     "instant": true,
-                    "interval": "",
-                    "intervalFactor": 1,
-                    "legendFormat": "",
-                    "refId": "A"
+                    "refId": "C"
                 }
             ],
             "timeFrom": null,
             "timeShift": null,
             "title": "",
             "transform": "table",
-            "type": "table"
+            "type": "table-old"
         },
         {
             "cacheTimeout": null,
@@ -1422,10 +1510,16 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "description": "Shows the total number of virtual CPUs on the host. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -1469,7 +1563,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1522,11 +1615,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "Shows the total amount of RAM of the host. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "bytes",
             "gauge": {
                 "maxValue": 100,
@@ -1570,7 +1669,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "30%",
             "prefix": "",
@@ -1591,7 +1689,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "node_memory_MemTotal_bytes{node_name=~\"$node_name\"}",
+                    "expr": "avg by (node_name) (node_memory_MemTotal_bytes{node_name=~\"$node_name\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -1622,11 +1720,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": null,
             "description": "",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "short",
             "gauge": {
                 "maxValue": 100,
@@ -1659,7 +1763,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1682,11 +1785,16 @@
                 {
                     "expr": "sum(process_open_fds{node_name=~\"$node_name\"})",
                     "format": "time_series",
+                    "hide": true,
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "",
                     "refId": "A",
                     "step": 300
+                },
+                {
+                    "expr": "sum(sum by (agent_type) (process_open_fds{node_name=~\"$node_name\"}) or sum by (agent_type) (label_replace(label_replace(process_open_fds{job=~\"rds.*\"},\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\"))  * count by (agent_type) (label_replace(process_open_fds{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\")))",
+                    "refId": "B"
                 }
             ],
             "thresholds": "512,800",
@@ -1713,17 +1821,21 @@
             },
             "id": 2264,
             "panels": [],
-            "repeat": null,
-            "repeatIteration": 1574020921489,
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 2220,
             "title": "",
             "type": "row"
         },
         {
-            "content": "$node_name",
             "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "gridPos": {
-                "h": 2,
+                "h": 4,
                 "w": 5,
                 "x": 0,
                 "y": 30
@@ -1747,12 +1859,15 @@
                     "url": "/graph/d/node-instance-summary/node-summary?$__url_time_range&$__all_variables"
                 }
             ],
-            "mode": "markdown",
-            "options": {},
-            "repeatIteration": 1574020921489,
+            "options": {
+                "content": "$node_name",
+                "mode": "markdown"
+            },
+            "pluginVersion": "7.3.7",
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 162,
             "repeatedByRow": true,
-            "title": "Host",
+            "title": "Node name",
             "type": "text"
         },
         {
@@ -1764,8 +1879,15 @@
                 "rgba(237, 129, 40, 0.89)",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
+            "decimals": 2,
             "description": "Show the CPU usage as a percentage for all Exporters on a per-host basis. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "percent",
             "gauge": {
                 "maxValue": 100,
@@ -1813,7 +1935,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1825,7 +1946,7 @@
                     "to": "null"
                 }
             ],
-            "repeatIteration": 1574020921489,
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 2228,
             "repeatedByRow": true,
             "sparkline": {
@@ -1833,22 +1954,20 @@
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
                 "show": true,
-                "ymax": null,
-                "ymin": null
+                "ymax": 100,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "((sum(rate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[$interval])) by (node_name) \nor sum(irate(process_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}[5m])) by (node_name)) \n/ count(node_cpu_seconds_total{node_name=~\"$node_name\",mode=\"user\"}) by (node_name)*100) or \nsum by () ((max_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[$interval]) or \nmax_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[5m])))",
-                    "format": "time_series",
-                    "interval": "$interval",
-                    "intervalFactor": 1,
+                    "expr": "(sum(rate(process_cpu_seconds_total{job=~\".*exporter.*|^vmagent.*\",node_name=~\"$node_name\"}[$interval]) or irate(process_cpu_seconds_total{job=~\".*exporter.*|^vmagent.*\",node_name=~\"$node_name\"}[5m]) or\nlabel_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[$interval]),\"node_name\",\"pmm-server\",\"\",\"\") or\nlabel_replace(rate(process_cpu_seconds_total{job=~\"rds.*\"}[5m]),\"node_name\",\"pmm-server\",\"\",\"\")) by (node_name)) / \ncount(node_cpu_seconds_total{job=~\".*exporter.*\",node_name=~\"$node_name\"}) by (node_name) * 100 or\nsum by (node_name) ((max_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[$interval]) or \nmax_over_time(node_cpu_average{node_name=~\"$node_name\", mode=\"total\"}[5m])))",
+                    "interval": "",
                     "legendFormat": "",
-                    "refId": "A"
+                    "refId": "B"
                 }
             ],
             "thresholds": "5,10",
-            "title": "CPU  Used",
+            "title": "CPU Used",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -1869,11 +1988,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
-            "decimals": null,
+            "datasource": null,
+            "decimals": 2,
             "description": "Shows total Memory Used by Exporters on a per-host basis. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "bytes",
             "gauge": {
                 "maxValue": 100,
@@ -1922,7 +2047,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -1934,7 +2058,7 @@
                     "to": "null"
                 }
             ],
-            "repeatIteration": 1574020921489,
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 163,
             "repeatedByRow": true,
             "sparkline": {
@@ -1946,20 +2070,14 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "calculatedInterval": "10m",
-                    "datasourceErrors": {},
-                    "errors": {},
-                    "expr": "sum(process_resident_memory_bytes{job=~\".*exporter.*\",node_name=~\"$node_name\"}) by (node_name)",
-                    "format": "time_series",
+                    "expr": "sum(\nmax_over_time(process_resident_memory_bytes{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[$interval]) or max_over_time(process_resident_memory_bytes{job=~\".*exporter.*|^vmagent.*\",job!~\"rds.*\",node_name=~\"$node_name\"}[5m]) or\n(sum by (node_name) (label_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[$interval]),\"node_name\",\"pmm-server\",\"\",\"\") or\nlabel_replace(max_over_time(process_resident_memory_bytes{job=~\"rds.*\"}[5m]),\"node_name\",\"pmm-server\",\"\",\"\"))) * count by (node_name) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"node_name\", \"pmm-server\", \"\", \"\"))\n) by (node_name)",
+                    "hide": false,
                     "interval": "$interval",
-                    "intervalFactor": 1,
                     "legendFormat": "",
-                    "metric": "node_mem",
-                    "refId": "A",
-                    "step": 300
+                    "refId": "B"
                 }
             ],
-            "thresholds": "50000000,100000000",
+            "thresholds": "100000000,200000000",
             "title": "Mem Used",
             "type": "singlestat",
             "valueFontSize": "50%",
@@ -1975,11 +2093,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "Shows the number of Exporters running on a per-host basis. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "short",
             "gauge": {
                 "maxValue": 100,
@@ -2028,7 +2152,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2040,7 +2163,7 @@
                     "to": "null"
                 }
             ],
-            "repeatIteration": 1574020921489,
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 314,
             "repeatedByRow": true,
             "sparkline": {
@@ -2057,12 +2180,17 @@
                     "errors": {},
                     "expr": "count(process_open_fds{job=~\".*exporter.*\",node_name=~\"$node_name\"}) ",
                     "format": "time_series",
+                    "hide": true,
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "",
                     "metric": "node_mem",
                     "refId": "A",
                     "step": 300
+                },
+                {
+                    "expr": "sum(count by (agent_type) (process_cpu_seconds_total{node_name=~\"$node_name\"}) or count by (agent_type) (label_replace(label_replace(process_cpu_seconds_total{job=~\"rds.*\"},\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\"))  * count by (agent_type) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\")))",
+                    "refId": "B"
                 }
             ],
             "thresholds": "512,800",
@@ -2075,6 +2203,12 @@
         {
             "columns": [],
             "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "fontSize": "100%",
             "gridPos": {
                 "h": 4,
@@ -2084,9 +2218,8 @@
             },
             "id": 2269,
             "links": [],
-            "options": {},
             "pageSize": null,
-            "repeatIteration": 1574020921489,
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 2246,
             "repeatedByRow": true,
             "scroll": true,
@@ -2098,12 +2231,14 @@
             "styles": [
                 {
                     "alias": "Exporters",
+                    "align": "auto",
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
                     "pattern": "agent_type",
                     "type": "string"
                 },
                 {
                     "alias": "Amount",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -2120,6 +2255,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -2135,20 +2271,18 @@
             ],
             "targets": [
                 {
-                    "expr": "count(process_cpu_seconds_total{node_name=~\"$node_name\"}) by (agent_type)",
+                    "expr": "sum by (agent_type) (count by (agent_type) (process_cpu_seconds_total{node_name=~\"$node_name\"}) or count by (agent_type) (label_replace(label_replace(process_cpu_seconds_total{job=~\"rds.*\"},\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\"))  * count by (agent_type) (label_replace(process_resident_memory_bytes{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\")))",
                     "format": "table",
+                    "hide": false,
                     "instant": true,
-                    "interval": "",
-                    "intervalFactor": 1,
-                    "legendFormat": "",
-                    "refId": "A"
+                    "refId": "C"
                 }
             ],
             "timeFrom": null,
             "timeShift": null,
             "title": "",
             "transform": "table",
-            "type": "table"
+            "type": "table-old"
         },
         {
             "cacheTimeout": null,
@@ -2159,10 +2293,16 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "description": "Shows the total number of virtual CPUs on the host. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "none",
             "gauge": {
                 "maxValue": 100,
@@ -2206,7 +2346,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2218,7 +2357,7 @@
                     "to": "null"
                 }
             ],
-            "repeatIteration": 1574020921489,
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 25,
             "repeatedByRow": true,
             "sparkline": {
@@ -2262,11 +2401,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "Shows the total amount of RAM of the host. An Exporter is a software library that provides metrics to PMM.\n\nSee also:",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "bytes",
             "gauge": {
                 "maxValue": 100,
@@ -2310,7 +2455,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "30%",
             "prefix": "",
@@ -2322,7 +2466,7 @@
                     "to": "null"
                 }
             ],
-            "repeatIteration": 1574020921489,
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 26,
             "repeatedByRow": true,
             "sparkline": {
@@ -2334,7 +2478,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "node_memory_MemTotal_bytes{node_name=~\"$node_name\"}",
+                    "expr": "avg by (node_name) (node_memory_MemTotal_bytes{node_name=~\"$node_name\"})",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -2365,11 +2509,17 @@
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(245, 54, 54, 0.9)"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": null,
             "description": "",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "format": "short",
             "gauge": {
                 "maxValue": 100,
@@ -2402,7 +2552,6 @@
             "maxDataPoints": 100,
             "nullPointMode": "connected",
             "nullText": null,
-            "options": {},
             "postfix": "",
             "postfixFontSize": "50%",
             "prefix": "",
@@ -2414,7 +2563,7 @@
                     "to": "null"
                 }
             ],
-            "repeatIteration": 1574020921489,
+            "repeatIteration": 1618491804593,
             "repeatPanelId": 2263,
             "repeatedByRow": true,
             "sparkline": {
@@ -2428,11 +2577,16 @@
                 {
                     "expr": "sum(process_open_fds{node_name=~\"$node_name\"})",
                     "format": "time_series",
+                    "hide": true,
                     "interval": "$interval",
                     "intervalFactor": 1,
                     "legendFormat": "",
                     "refId": "A",
                     "step": 300
+                },
+                {
+                    "expr": "sum(sum by (agent_type) (process_open_fds{node_name=~\"$node_name\"}) or sum by (agent_type) (label_replace(label_replace(process_open_fds{job=~\"rds.*\"},\"agent_type\", \"rds_exporter\", \"job\", \"rds_exporter_(.*)\"),\"node_name\",\"pmm-server\",\"\",\"\"))  * count by (agent_type) (label_replace(process_open_fds{instance=~\"$node_name\",job=\"prometheus\"},\"agent_type\", \"rds_exporter\", \"\", \"\")))",
+                    "refId": "B"
                 }
             ],
             "thresholds": "512,800",
@@ -2450,7 +2604,7 @@
         }
     ],
     "refresh": "1m",
-    "schemaVersion": 20,
+    "schemaVersion": 26,
     "style": "dark",
     "tags": [
         "Percona",
@@ -2464,7 +2618,8 @@
                 "auto_count": 200,
                 "auto_min": "1s",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
+                "error": null,
                 "hide": 0,
                 "includeAll": false,
                 "label": "Interval",
@@ -2522,8 +2677,9 @@
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"node_load1|process_start_time_seconds\"}, node_name)",
+                "error": null,
                 "hide": 0,
                 "includeAll": true,
                 "label": "Node Name",
@@ -2536,7 +2692,7 @@
                 "refresh_on_load": false,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": "instance",
                 "tags": [],
                 "tagsQuery": "up",
@@ -2546,8 +2702,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(process_start_time_seconds{node_name=~\"$node_name\"}, service_name)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Service Name",
@@ -2558,7 +2715,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",

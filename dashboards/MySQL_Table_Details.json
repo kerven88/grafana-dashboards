@@ -13,7 +13,6 @@
                 "showIn": 0,
                 "tags": [
                     "pmm_annotation",
-                    "$node_name",
                     "$service_name"
                 ],
                 "type": "tags"
@@ -36,7 +35,7 @@
     "gnetId": null,
     "graphTooltip": 1,
     "id": null,
-    "iteration": 1573838818794,
+    "iteration": 1582057127962,
     "links": [
         {
             "icon": "doc",
@@ -109,7 +108,7 @@
         },
         {
             "asDropdown": true,
-            "includeVars": true,
+            "includeVars": false,
             "keepTime": true,
             "tags": [
                 "PMM"
@@ -123,6 +122,12 @@
         {
             "breadcrumbItemsMaxAmount": 6,
             "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "gridPos": {
                 "h": 2,
                 "w": 24,
@@ -133,7 +138,6 @@
             "id": 999,
             "isRootDashboard": false,
             "links": [],
-            "options": {},
             "targets": [
                 {
                     "expr": "",
@@ -170,9 +174,15 @@
                     "value": "current"
                 }
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "fontSize": "100%",
             "gridPos": {
                 "h": 7,
@@ -184,17 +194,17 @@
             "hideTimeOverride": true,
             "id": 49,
             "links": [],
-            "options": {},
             "pageSize": null,
             "scroll": false,
             "showHeader": true,
             "sort": {
-                "col": 1,
+                "col": 4,
                 "desc": true
             },
             "styles": [
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -206,7 +216,7 @@
                     "mappingType": 1,
                     "pattern": "Time",
                     "thresholds": [],
-                    "type": "date",
+                    "type": "hidden",
                     "unit": "short"
                 },
                 {
@@ -226,11 +236,12 @@
             ],
             "targets": [
                 {
-                    "expr": "topk(10, sum(mysql_info_schema_table_rows{service_name=~\"$service_name\"}) by (schema, table)) > 0",
+                    "expr": "topk(10, avg by (service_name,schema,table) (sum(mysql_info_schema_table_rows{service_name=~\"$service_name\"}) by (service_name, schema, table))) > 0",
                     "format": "table",
+                    "instant": true,
                     "interval": "5m",
                     "intervalFactor": 1,
-                    "legendFormat": "{{ schema }}.{{ table }}",
+                    "legendFormat": "{{service_name}}.{{ schema }}.{{ table }}",
                     "refId": "A",
                     "step": 300
                 }
@@ -238,7 +249,7 @@
             "timeFrom": "5m",
             "title": "Largest Tables by Row Count",
             "transform": "table",
-            "type": "table"
+            "type": "table-old"
         },
         {
             "columns": [
@@ -247,9 +258,15 @@
                     "value": "current"
                 }
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "fontSize": "100%",
             "gridPos": {
                 "h": 7,
@@ -261,17 +278,17 @@
             "hideTimeOverride": true,
             "id": 51,
             "links": [],
-            "options": {},
             "pageSize": null,
             "scroll": false,
             "showHeader": true,
             "sort": {
-                "col": 1,
+                "col": 4,
                 "desc": true
             },
             "styles": [
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -283,7 +300,7 @@
                     "mappingType": 1,
                     "pattern": "Time",
                     "thresholds": [],
-                    "type": "date",
+                    "type": "hidden",
                     "unit": "short"
                 },
                 {
@@ -303,11 +320,12 @@
             ],
             "targets": [
                 {
-                    "expr": "topk(10, sum(mysql_info_schema_table_size{service_name=~\"$service_name\", component!=\"data_free\"}) by (schema, table)) > 0",
+                    "expr": "topk(10, avg by (service_name,schema,table) (sum(mysql_info_schema_table_size{service_name=~\"$service_name\", component!=\"data_free\"}) by (schema, table,service_name))) > 0",
                     "format": "table",
+                    "instant": true,
                     "interval": "5m",
                     "intervalFactor": 1,
-                    "legendFormat": "{{ schema }}.{{ table }}",
+                    "legendFormat": "{{service_name}}.{{ schema }}.{{ table }}",
                     "refId": "A",
                     "step": 300
                 }
@@ -315,7 +333,7 @@
             "timeFrom": "5m",
             "title": "Largest Tables by Size",
             "transform": "table",
-            "type": "table"
+            "type": "table-old"
         },
         {
             "collapsed": false,
@@ -328,8 +346,8 @@
             },
             "id": 56,
             "panels": [],
-            "repeat": null,
-            "title": "Pie",
+            "repeat": "service_name",
+            "title": "Size - $service_name",
             "type": "row"
         },
         {
@@ -339,10 +357,18 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
+            "description": "",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "links": []
+                },
+                "overrides": []
+            },
             "fill": 2,
             "fillGradient": 0,
             "grid": {},
@@ -352,6 +378,7 @@
                 "x": 0,
                 "y": 11
             },
+            "hiddenSeries": false,
             "id": 54,
             "legend": {
                 "alignAsTable": true,
@@ -372,10 +399,11 @@
             "links": [],
             "nullPointMode": "null",
             "options": {
-                "dataLinks": []
+                "alertThreshold": true
             },
             "paceLength": 10,
             "percentage": false,
+            "pluginVersion": "7.3.7",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -388,7 +416,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "sum(max_over_time(mysql_info_schema_table_size{service_name=~\"$service_name\", component!=\"data_free\"}[$interval]) or\nmax_over_time(mysql_info_schema_table_size{service_name=~\"$service_name\", component!=\"data_free\"}[5m]))",
+                    "expr": "avg by (service_name) (sum(max_over_time(mysql_info_schema_table_size{service_name=~\"$service_name\", component!=\"data_free\"}[$interval]) or\nmax_over_time(mysql_info_schema_table_size{service_name=~\"$service_name\", component!=\"data_free\"}[5m])))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -401,7 +429,7 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "sum(max_over_time(mysql_info_schema_table_size{service_name=~\"$service_name\", component=\"data_free\"}[$interval]) or\nmax_over_time(mysql_info_schema_table_size{service_name=~\"$service_name\", component=\"data_free\"}[5m]))",
+                    "expr": "avg by (service_name) (sum(max_over_time(mysql_info_schema_table_size{service_name=~\"$service_name\", component=\"data_free\"}[$interval]) or\nmax_over_time(mysql_info_schema_table_size{service_name=~\"$service_name\", component=\"data_free\"}[5m])))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -415,11 +443,11 @@
             "timeFrom": null,
             "timeRegions": [],
             "timeShift": null,
-            "title": "Total Database Size",
+            "title": "Total Databases Size - $service_name",
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -459,9 +487,16 @@
                     "value": "current"
                 }
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
+            "description": "",
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "fontSize": "100%",
             "gridPos": {
                 "h": 8,
@@ -473,17 +508,17 @@
             "hideTimeOverride": true,
             "id": 50,
             "links": [],
-            "options": {},
             "pageSize": null,
             "scroll": false,
             "showHeader": true,
             "sort": {
-                "col": 1,
+                "col": 4,
                 "desc": true
             },
             "styles": [
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -495,7 +530,7 @@
                     "mappingType": 1,
                     "pattern": "Time",
                     "thresholds": [],
-                    "type": "date",
+                    "type": "hidden",
                     "unit": "short"
                 },
                 {
@@ -515,8 +550,9 @@
             ],
             "targets": [
                 {
-                    "expr": "topk(5, sum(mysql_info_schema_table_size{service_name=~\"$service_name\", component=\"data_free\"}) by (schema, table)) > 0",
+                    "expr": "topk(5, avg by (service_name,schema,table) (sum(mysql_info_schema_table_size{service_name=~\"$service_name\", component=\"data_free\"}) by (schema, table, service_name)))",
                     "format": "table",
+                    "instant": true,
                     "interval": "5m",
                     "intervalFactor": 1,
                     "legendFormat": "{{ schema }}.{{ table }}",
@@ -525,9 +561,9 @@
                 }
             ],
             "timeFrom": "5m",
-            "title": "Most Fragmented Tables by Freeable Size",
+            "title": "Most Fragmented Tables by Freeable Size - $service_name",
             "transform": "table",
-            "type": "table"
+            "type": "table-old"
         },
         {
             "collapsed": false,
@@ -545,10 +581,15 @@
             "type": "row"
         },
         {
-            "content": "The next two graphs are available only for [Percona Server](https://www.percona.com/doc/percona-server/5.6/diagnostics/user_stats.html) and [MariaDB](https://mariadb.com/kb/en/mariadb/user-statistics/) and require `userstat` variable turned on.",
-            "datasource": "Prometheus",
+            "datasource": null,
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "gridPos": {
                 "h": 2,
                 "w": 24,
@@ -558,8 +599,11 @@
             "height": "50px",
             "id": 44,
             "links": [],
-            "mode": "markdown",
-            "options": {},
+            "options": {
+                "content": "The next two graphs are available only for [Percona Server](https://www.percona.com/doc/percona-server/5.6/diagnostics/user_stats.html) and [MariaDB](https://mariadb.com/kb/en/mariadb/user-statistics/) and require `userstat` variable turned on.",
+                "mode": "markdown"
+            },
+            "pluginVersion": "7.3.7",
             "style": {},
             "title": "",
             "transparent": true,
@@ -577,7 +621,7 @@
             "id": 58,
             "panels": [],
             "repeat": null,
-            "title": "Rows read",
+            "title": "Rows Read",
             "type": "row"
         },
         {
@@ -585,10 +629,17 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "links": []
+                },
+                "overrides": []
+            },
             "fill": 2,
             "fillGradient": 0,
             "grid": {},
@@ -598,6 +649,7 @@
                 "x": 0,
                 "y": 23
             },
+            "hiddenSeries": false,
             "id": 48,
             "legend": {
                 "alignAsTable": true,
@@ -618,10 +670,11 @@
             "links": [],
             "nullPointMode": "null",
             "options": {
-                "dataLinks": []
+                "alertThreshold": true
             },
             "paceLength": 10,
             "percentage": false,
+            "pluginVersion": "7.3.7",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -634,11 +687,11 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "topk(5, rate(mysql_info_schema_table_statistics_rows_read_total{service_name=~\"$service_name\"}[$interval]))or \ntopk(5, irate(mysql_info_schema_table_statistics_rows_read_total{service_name=~\"$service_name\"}[5m])>0)",
+                    "expr": "topk(5, avg by (service_name,schema,table) (rate(mysql_info_schema_table_statistics_rows_read_total{service_name=~\"$service_name\"}[$interval]))>0) or \ntopk(5, avg by (service_name,schema,table) (irate(mysql_info_schema_table_statistics_rows_read_total{service_name=~\"$service_name\"}[5m]))>0)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
-                    "legendFormat": "{{ schema }}.{{ table }}",
+                    "legendFormat": "{{service_name}} - {{ schema }}.{{ table }}",
                     "metric": "",
                     "refId": "A",
                     "step": 300
@@ -652,7 +705,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -705,10 +758,17 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "links": []
+                },
+                "overrides": []
+            },
             "fill": 2,
             "fillGradient": 0,
             "grid": {},
@@ -718,6 +778,7 @@
                 "x": 0,
                 "y": 32
             },
+            "hiddenSeries": false,
             "id": 42,
             "interval": "",
             "legend": {
@@ -740,10 +801,11 @@
             "links": [],
             "nullPointMode": "null",
             "options": {
-                "dataLinks": []
+                "alertThreshold": true
             },
             "paceLength": 10,
             "percentage": false,
+            "pluginVersion": "7.3.7",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -756,11 +818,11 @@
                     "calculatedInterval": "2m",
                     "datasourceErrors": {},
                     "errors": {},
-                    "expr": "topk(5, rate(mysql_info_schema_table_statistics_rows_changed_total{service_name=~\"$service_name\"}[$interval])>0) or topk(5, irate(mysql_info_schema_table_statistics_rows_changed_total{service_name=~\"$service_name\"}[5m])>0)",
+                    "expr": "topk(5, avg by (service_name,schema,table) (rate(mysql_info_schema_table_statistics_rows_changed_total{service_name=~\"$service_name\"}[$interval])>0)) or topk(5, avg by (service_name,schema,table) (irate(mysql_info_schema_table_statistics_rows_changed_total{service_name=~\"$service_name\"}[5m]))>0)",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
-                    "legendFormat": "{{ schema }}.{{ table }}",
+                    "legendFormat": "{{service_name}} - {{ schema }}.{{ table }}",
                     "metric": "",
                     "refId": "A",
                     "step": 300
@@ -774,7 +836,7 @@
             "tooltip": {
                 "msResolution": false,
                 "shared": true,
-                "sort": 0,
+                "sort": 5,
                 "value_type": "individual"
             },
             "type": "graph",
@@ -829,9 +891,15 @@
                     "value": "current"
                 }
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "editable": true,
             "error": false,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
             "fontSize": "100%",
             "gridPos": {
                 "h": 7,
@@ -843,17 +911,17 @@
             "hideTimeOverride": true,
             "id": 53,
             "links": [],
-            "options": {},
             "pageSize": null,
             "scroll": false,
             "showHeader": true,
             "sort": {
-                "col": 21,
+                "col": 4,
                 "desc": true
             },
             "styles": [
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -870,6 +938,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -881,11 +950,12 @@
                     "mappingType": 1,
                     "pattern": "Time",
                     "thresholds": [],
-                    "type": "date",
+                    "type": "hidden",
                     "unit": "short"
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -902,6 +972,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -918,6 +989,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -934,6 +1006,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -950,6 +1023,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -966,6 +1040,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -982,6 +1057,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -998,6 +1074,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1014,6 +1091,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1030,6 +1108,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1046,6 +1125,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1062,6 +1142,7 @@
                 },
                 {
                     "alias": "",
+                    "align": "auto",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1096,8 +1177,9 @@
             ],
             "targets": [
                 {
-                    "expr": "topk(10, mysql_info_schema_auto_increment_column{service_name=~\"$service_name\"} / mysql_info_schema_auto_increment_column_max{service_name=~\"$service_name\"})",
+                    "expr": "topk(10, avg by (service_name,schema,table) (mysql_info_schema_auto_increment_column{service_name=~\"$service_name\"} / mysql_info_schema_auto_increment_column_max{service_name=~\"$service_name\"}))",
                     "format": "table",
+                    "instant": true,
                     "interval": "5m",
                     "intervalFactor": 1,
                     "legendFormat": "{{ schema }}.{{ table }}",
@@ -1108,7 +1190,7 @@
             "timeFrom": "5m",
             "title": "Top Tables by Auto Increment Usage",
             "transform": "table",
-            "type": "table"
+            "type": "table-old"
         },
         {
             "collapsed": true,
@@ -1131,7 +1213,7 @@
                         "rgba(237, 129, 40, 0.89)",
                         "rgba(50, 172, 45, 0.97)"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "**MySQL Uptime**\n\nThe amount of time since the last restart of the MySQL server process.",
                     "editable": true,
@@ -1148,7 +1230,7 @@
                         "h": 2,
                         "w": 3,
                         "x": 0,
-                        "y": 49
+                        "y": 76
                     },
                     "height": "125px",
                     "id": 295,
@@ -1168,7 +1250,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "s",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -1192,7 +1273,7 @@
                             "calculatedInterval": "10m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "mysql_global_status_uptime{service_name=~\"$service_name\"}",
+                            "expr": "avg by (service_name) (mysql_global_status_uptime{service_name=~\"$service_name\"})",
                             "format": "time_series",
                             "interval": "5m",
                             "intervalFactor": 1,
@@ -1210,18 +1291,17 @@
                     "valueName": "current"
                 },
                 {
-                    "content": "<h5><b><font color=#e68a00><center>$version</center></font></b></h5>\n\n\n",
+                    "content": "<h3 style='color:#e68a00;font-weight:bold;text-align:center'>$version</h3>",
                     "datasource": null,
                     "gridPos": {
                         "h": 2,
                         "w": 3,
                         "x": 3,
-                        "y": 49
+                        "y": 76
                     },
                     "id": 297,
                     "links": [],
                     "mode": "html",
-                    "options": {},
                     "timeFrom": null,
                     "timeShift": null,
                     "title": "Version",
@@ -1236,7 +1316,7 @@
                         "rgba(237, 129, 40, 0.89)",
                         "rgba(50, 172, 45, 0.97)"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "**Current QPS**\n\nBased on the queries reported by MySQL's ``SHOW STATUS`` command, it is the number of statements executed by the server within the last second. This variable includes statements executed within stored programs, unlike the Questions variable. It does not count \n``COM_PING`` or ``COM_STATISTICS`` commands.",
                     "editable": true,
@@ -1253,7 +1333,7 @@
                         "h": 2,
                         "w": 3,
                         "x": 6,
-                        "y": 49
+                        "y": 76
                     },
                     "height": "125px",
                     "id": 299,
@@ -1279,7 +1359,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -1303,7 +1382,7 @@
                             "calculatedInterval": "10m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "rate(mysql_global_status_queries{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_queries{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mysql_global_status_queries{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_queries{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1330,7 +1409,7 @@
                         "rgba(237, 129, 40, 0.89)",
                         "#d44a3a"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "format": "percentunit",
@@ -1345,7 +1424,7 @@
                         "h": 2,
                         "w": 3,
                         "x": 9,
-                        "y": 49
+                        "y": 76
                     },
                     "id": 316,
                     "interval": null,
@@ -1364,7 +1443,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -1422,7 +1500,7 @@
                         "rgba(237, 129, 40, 0.89)",
                         "#d44a3a"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "format": "percentunit",
@@ -1437,7 +1515,7 @@
                         "h": 2,
                         "w": 3,
                         "x": 12,
-                        "y": 49
+                        "y": 76
                     },
                     "id": 317,
                     "interval": null,
@@ -1456,7 +1534,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -1482,7 +1559,7 @@
                             "calculatedInterval": "10m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "1-((rate(mysql_global_status_table_open_cache_hits{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_table_open_cache_hits{service_name=~\"$service_name\"}[5m]))/((rate(mysql_global_status_table_open_cache_hits{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_table_open_cache_hits{service_name=~\"$service_name\"}[5m]))+(rate(mysql_global_status_table_open_cache_misses{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_table_open_cache_misses{service_name=~\"$service_name\"}[5m]))))",
+                            "expr": "avg by (service_name) (1-((rate(mysql_global_status_table_open_cache_hits{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_table_open_cache_hits{service_name=~\"$service_name\"}[5m]))/((rate(mysql_global_status_table_open_cache_hits{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_table_open_cache_hits{service_name=~\"$service_name\"}[5m]))+(rate(mysql_global_status_table_open_cache_misses{service_name=~\"$service_name\"}[$interval]) or irate(mysql_global_status_table_open_cache_misses{service_name=~\"$service_name\"}[5m])))))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1514,7 +1591,7 @@
                         "rgba(237, 129, 40, 0.89)",
                         "#d44a3a"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "format": "short",
@@ -1529,7 +1606,7 @@
                         "h": 2,
                         "w": 3,
                         "x": 15,
-                        "y": 49
+                        "y": 76
                     },
                     "id": 318,
                     "interval": null,
@@ -1548,7 +1625,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -1574,7 +1650,7 @@
                             "calculatedInterval": "10m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "mysql_global_variables_table_open_cache{service_name=~\"$service_name\"} ",
+                            "expr": "avg by (service_name) (mysql_global_variables_table_open_cache{service_name=~\"$service_name\"})",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1606,7 +1682,7 @@
                         "rgba(237, 129, 40, 0.89)",
                         "#d44a3a"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "",
                     "format": "short",
@@ -1621,7 +1697,7 @@
                         "h": 2,
                         "w": 3,
                         "x": 18,
-                        "y": 49
+                        "y": 76
                     },
                     "id": 319,
                     "interval": null,
@@ -1640,7 +1716,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -1666,7 +1741,7 @@
                             "calculatedInterval": "10m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "mysql_global_variables_table_definition_cache{service_name=~\"$service_name\"} ",
+                            "expr": "avg by (service_name) (mysql_global_variables_table_definition_cache{service_name=~\"$service_name\"})",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1690,18 +1765,17 @@
                     "valueName": "current"
                 },
                 {
-                    "content": "<h5><b><font color=#e68a00><center><a href=\"/graph/d/mysql-instance-summary/mysql-instance-summary?var-node_name=$node_name&var-service_name=$service_name\" target=\"_blank\">$crop_service...</a></center></font></b></h5>",
+                    "content": "<h5 style='color:#e68a00;font-weight:bold;text-align:center'><a href=\"/graph/d/mysql-instance-summary/mysql-instance-summary?var-service_name=$service_name\" target=\"_blank\">$crop_service...</h5>",
                     "datasource": null,
                     "gridPos": {
                         "h": 2,
                         "w": 3,
                         "x": 21,
-                        "y": 49
+                        "y": 76
                     },
                     "id": 1000,
                     "links": [],
                     "mode": "html",
-                    "options": {},
                     "timeFrom": null,
                     "timeShift": null,
                     "title": "Service",
@@ -1712,7 +1786,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 0,
                     "description": "**Max Connections** \n\nMax Connections is the maximum permitted number of simultaneous client connections. By default, this is 151. Increasing this value increases the number of file descriptors that mysqld requires. If the required number of descriptors are not available, the server reduces the value of Max Connections.\n\nmysqld actually permits Max Connections + 1 clients to connect. The extra connection is reserved for use by accounts that have the SUPER privilege, such as root.\n\nMax Used Connections is the maximum number of connections that have been in use simultaneously since the server started.\n\nConnections is the number of connection attempts (successful or not) to the MySQL server.",
                     "editable": true,
@@ -1724,9 +1798,10 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 51
+                        "y": 78
                     },
                     "height": "250px",
+                    "hiddenSeries": false,
                     "id": 301,
                     "legend": {
                         "alignAsTable": true,
@@ -1773,7 +1848,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max(max_over_time(mysql_global_status_threads_connected{service_name=~\"$service_name\"}[$interval]) or \nmax_over_time(mysql_global_status_threads_connected{service_name=~\"$service_name\"}[5m]))",
+                            "expr": "avg by (service_name) (max(max_over_time(mysql_global_status_threads_connected{service_name=~\"$service_name\"}[$interval]) or \nmax_over_time(mysql_global_status_threads_connected{service_name=~\"$service_name\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1786,7 +1861,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max_over_time(mysql_global_status_max_used_connections{service_name=~\"$service_name\"}[$interval]) or \nmax_over_time(mysql_global_status_max_used_connections{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (max_over_time(mysql_global_status_max_used_connections{service_name=~\"$service_name\"}[$interval]) or \nmax_over_time(mysql_global_status_max_used_connections{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -1801,7 +1876,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max_over_time(mysql_global_variables_max_connections{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(mysql_global_variables_max_connections{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (max_over_time(mysql_global_variables_max_connections{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(mysql_global_variables_max_connections{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -1821,7 +1896,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -1861,7 +1936,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "**MySQL Active Threads**\n\nThreads Connected is the number of open connections, while Threads Running is the number of threads not sleeping.",
                     "editable": true,
@@ -1873,8 +1948,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 51
+                        "y": 78
                     },
+                    "hiddenSeries": false,
                     "id": 303,
                     "legend": {
                         "alignAsTable": true,
@@ -1926,7 +2002,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max_over_time(mysql_global_status_threads_connected{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(mysql_global_status_threads_connected{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (max_over_time(mysql_global_status_threads_connected{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(mysql_global_status_threads_connected{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -1940,7 +2016,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max_over_time(mysql_global_status_threads_running{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(mysql_global_status_threads_running{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (max_over_time(mysql_global_status_threads_running{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(mysql_global_status_threads_running{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1950,7 +2026,7 @@
                             "step": 20
                         },
                         {
-                            "expr": "avg_over_time(mysql_global_status_threads_running{service_name=~\"$service_name\"}[$interval]) or \navg_over_time(mysql_global_status_threads_running{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (avg_over_time(mysql_global_status_threads_running{service_name=~\"$service_name\"}[$interval]) or \navg_over_time(mysql_global_status_threads_running{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1967,7 +2043,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2009,7 +2085,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "**MySQL Handlers**\n\nHandler statistics are internal statistics on how MySQL is selecting, updating, inserting, and modifying rows, tables, and indexes.\n\nThis is in fact the layer between the Storage Engine and MySQL.\n\n* `read_rnd_next` is incremented when the server performs a full table scan and this is a counter you don't really want to see with a high value.\n* `read_key` is incremented when a read is done with an index.\n* `read_next` is incremented when the storage engine is asked to 'read the next index entry'. A high value means a lot of index scans are being done.",
                     "editable": true,
@@ -2021,8 +2097,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 59
+                        "y": 86
                     },
+                    "hiddenSeries": false,
                     "id": 309,
                     "legend": {
                         "alignAsTable": true,
@@ -2059,7 +2136,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "rate(mysql_global_status_handlers_total{service_name=~\"$service_name\"}[$interval]) or \nirate(mysql_global_status_handlers_total{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name,handler) (rate(mysql_global_status_handlers_total{service_name=~\"$service_name\"}[$interval]) or \nirate(mysql_global_status_handlers_total{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2077,7 +2154,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2115,7 +2192,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "**Top Command Counters**\n\nThe Com_{{xxx}} statement counter variables indicate the number of times each xxx statement has been executed. There is one status variable for each type of statement. For example, Com_delete and Com_update count [``DELETE``](https://dev.mysql.com/doc/refman/5.7/en/delete.html) and [``UPDATE``](https://dev.mysql.com/doc/refman/5.7/en/update.html) statements, respectively. Com_delete_multi and Com_update_multi are similar but apply to [``DELETE``](https://dev.mysql.com/doc/refman/5.7/en/delete.html) and [``UPDATE``](https://dev.mysql.com/doc/refman/5.7/en/update.html) statements that use multiple-table syntax.",
                     "editable": true,
@@ -2127,8 +2204,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 59
+                        "y": 86
                     },
+                    "hiddenSeries": false,
                     "id": 307,
                     "legend": {
                         "alignAsTable": true,
@@ -2171,7 +2249,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "topk(10, rate(mysql_global_status_commands_total{service_name=~\"$service_name\"}[$interval])>0) or \nirate(mysql_global_status_commands_total{service_name=~\"$service_name\"}[5m])>0",
+                            "expr": "topk(10, avg by (service_name,command) (rate(mysql_global_status_commands_total{service_name=~\"$service_name\"}[$interval]))>0 or \navg by (service_name,command) (irate(mysql_global_status_commands_total{service_name=~\"$service_name\"}[5m]))>0)",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -2190,7 +2268,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2228,7 +2306,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -2239,8 +2317,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 67
+                        "y": 94
                     },
+                    "hiddenSeries": false,
                     "id": 311,
                     "legend": {
                         "alignAsTable": true,
@@ -2277,7 +2356,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "max_over_time(mysql_info_schema_threads{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(mysql_info_schema_threads{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name,state) (max_over_time(mysql_info_schema_threads{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(mysql_info_schema_threads{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2295,7 +2374,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2333,7 +2412,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "**MySQL Network Traffic**\n\nHere we can see how much network traffic is generated by MySQL. Outbound is network traffic sent from MySQL and Inbound is network traffic MySQL has received.",
                     "editable": true,
@@ -2345,8 +2424,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 67
+                        "y": 94
                     },
+                    "hiddenSeries": false,
                     "id": 305,
                     "legend": {
                         "alignAsTable": true,
@@ -2387,7 +2467,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "rate(mysql_global_status_bytes_received{service_name=~\"$service_name\"}[$interval]) or \nirate(mysql_global_status_bytes_received{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mysql_global_status_bytes_received{service_name=~\"$service_name\"}[$interval]) or \nirate(mysql_global_status_bytes_received{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2400,7 +2480,7 @@
                             "calculatedInterval": "2m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "rate(mysql_global_status_bytes_sent{service_name=~\"$service_name\"}[$interval]) or \nirate(mysql_global_status_bytes_sent{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (rate(mysql_global_status_bytes_sent{service_name=~\"$service_name\"}[$interval]) or \nirate(mysql_global_status_bytes_sent{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2418,7 +2498,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2452,7 +2532,8 @@
                     }
                 }
             ],
-            "title": "MySQL Summary",
+            "repeat": "service_name",
+            "title": "MySQL Summary - $service_name",
             "type": "row"
         },
         {
@@ -2476,10 +2557,17 @@
                         "rgba(237, 129, 40, 0.89)",
                         "rgba(50, 172, 45, 0.97)"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
+                    "description": "The parameter shows how long a system has been \u201cup\u201d and running without a shut down or restart.",
                     "editable": true,
                     "error": false,
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {}
+                        },
+                        "overrides": []
+                    },
                     "format": "s",
                     "gauge": {
                         "maxValue": 100,
@@ -2512,7 +2600,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "s",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -2536,7 +2623,7 @@
                             "calculatedInterval": "10m",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "(node_time_seconds{node_name=~\"$node_name\"} - node_boot_time_seconds{node_name=~\"$node_name\"}) or (time() - node_boot_time_seconds{node_name=~\"$node_name\"})",
+                            "expr": "avg by (node_name) ((node_time_seconds{node_name=~\"$node_name\"} - node_boot_time_seconds{node_name=~\"$node_name\"}) or (time() - node_boot_time_seconds{node_name=~\"$node_name\"}))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "5m",
@@ -2563,8 +2650,15 @@
                         "rgba(237, 129, 40, 0.89)",
                         "#d44a3a"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
+                    "description": "The system load is a measurement of the computational work the system is performing. Each running process either using or waiting for CPU resources adds 1 to the load.",
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {}
+                        },
+                        "overrides": []
+                    },
                     "format": "none",
                     "gauge": {
                         "maxValue": 100,
@@ -2596,7 +2690,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -2619,7 +2712,7 @@
                     "tableColumn": "",
                     "targets": [
                         {
-                            "expr": "avg_over_time(node_load1{node_name=~\"$node_name\"}[$interval]) or avg_over_time(node_load1{node_name=~\"$node_name\"}[5m])",
+                            "expr": "avg by (node_name) (avg_over_time(node_load1{node_name=~\"$node_name\"}[$interval]) or avg_over_time(node_load1{node_name=~\"$node_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -2648,10 +2741,17 @@
                         "rgba(237, 129, 40, 0.89)",
                         "rgba(50, 172, 45, 0.97)"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 1,
+                    "description": "RAM (Random Access Memory) is the hardware in a computing device where the operating system, application programs and data in current use are kept so they can be quickly reached by the device's processor.",
                     "editable": true,
                     "error": false,
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {}
+                        },
+                        "overrides": []
+                    },
                     "format": "bytes",
                     "gauge": {
                         "maxValue": 100,
@@ -2684,7 +2784,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -2705,7 +2804,7 @@
                     "tableColumn": "",
                     "targets": [
                         {
-                            "expr": "node_memory_MemTotal_bytes{node_name=~\"$node_name\"}",
+                            "expr": "avg by (node_name) (node_memory_MemTotal_bytes{node_name=~\"$node_name\"})",
                             "format": "time_series",
                             "interval": "5m",
                             "intervalFactor": 1,
@@ -2735,9 +2834,15 @@
                         "rgba(237, 129, 40, 0.89)",
                         "#299c46"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Percent of Memory Available\nNote: on Modern Linux Kernels amount of Memory Available for application is not the same as Free+Cached+Buffers",
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {}
+                        },
+                        "overrides": []
+                    },
                     "format": "percent",
                     "gauge": {
                         "maxValue": 100,
@@ -2769,7 +2874,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -2792,10 +2896,11 @@
                     "tableColumn": "",
                     "targets": [
                         {
-                            "expr": "(node_memory_MemAvailable_bytes{node_name=~\"$node_name\"} or (node_memory_MemFree_bytes{node_name=~\"$node_name\"} + node_memory_Buffers_bytes{node_name=~\"$node_name\"} + node_memory_Cached_bytes{node_name=~\"$node_name\"})) / node_memory_MemTotal_bytes{node_name=~\"$node_name\"} * 100",
+                            "expr": "avg by (node_name) (((node_memory_MemAvailable_bytes{node_name=~\"$node_name\"} or (node_memory_MemFree_bytes{node_name=~\"$node_name\"} + node_memory_Buffers_bytes{node_name=~\"$node_name\"} + node_memory_Cached_bytes{node_name=~\"$node_name\"})) / node_memory_MemTotal_bytes{node_name=~\"$node_name\"}) * 100 or (100 - azure_memory_percent_average{node_name=~\"$node_name\"}))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
+                            "legendFormat": "",
                             "refId": "A"
                         }
                     ],
@@ -2821,11 +2926,17 @@
                         "rgba(237, 129, 40, 0.89)",
                         "rgba(50, 172, 45, 0.97)"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "RAM + SWAP",
                     "editable": true,
                     "error": false,
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {}
+                        },
+                        "overrides": []
+                    },
                     "format": "bytes",
                     "gauge": {
                         "maxValue": 100,
@@ -2858,7 +2969,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -2879,7 +2989,7 @@
                     "tableColumn": "",
                     "targets": [
                         {
-                            "expr": "node_memory_MemTotal_bytes{node_name=~\"$node_name\"}+node_memory_SwapTotal_bytes{node_name=~\"$node_name\"}",
+                            "expr": "avg by (node_name) (node_memory_MemTotal_bytes{node_name=~\"$node_name\"}+node_memory_SwapTotal_bytes{node_name=~\"$node_name\"})",
                             "format": "time_series",
                             "interval": "5m",
                             "intervalFactor": 1,
@@ -2909,11 +3019,17 @@
                         "rgba(237, 129, 40, 0.89)",
                         "rgba(50, 172, 45, 0.97)"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Sum of disk space on all partitions. Note  it can be significantly over-reported in some installations",
                     "editable": true,
                     "error": false,
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {}
+                        },
+                        "overrides": []
+                    },
                     "format": "bytes",
                     "gauge": {
                         "maxValue": 100,
@@ -2952,7 +3068,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -2973,7 +3088,7 @@
                     "tableColumn": "",
                     "targets": [
                         {
-                            "expr": "sum(avg(node_filesystem_size_bytes{node_name=~\"$node_name\",fstype=~\"(ext.|xfs|vfat|)\"}) without (mountpoint)) without (device,fstype)",
+                            "expr": "avg by (node_name) (sum(avg(node_filesystem_size_bytes{node_name=~\"$node_name\",fstype=~\"(ext.|xfs|vfat|)\"}) without (mountpoint)) without (device,fstype))",
                             "format": "time_series",
                             "interval": "5m",
                             "intervalFactor": 1,
@@ -3003,9 +3118,15 @@
                         "rgba(237, 129, 40, 0.89)",
                         "#299c46"
                     ],
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Lowest percent of the disk space available",
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {}
+                        },
+                        "overrides": []
+                    },
                     "format": "percent",
                     "gauge": {
                         "maxValue": 100,
@@ -3037,7 +3158,6 @@
                     "maxDataPoints": 100,
                     "nullPointMode": "connected",
                     "nullText": null,
-                    "options": {},
                     "postfix": "",
                     "postfixFontSize": "50%",
                     "prefix": "",
@@ -3060,10 +3180,11 @@
                     "tableColumn": "",
                     "targets": [
                         {
-                            "expr": "min(node_filesystem_free_bytes{node_name=~\"$node_name\", fstype!~\"rootfs|selinuxfs|autofs|rpc_pipefs|tmpfs|shm|overlay|squashfs\"}/node_filesystem_size_bytes{node_name=~\"$node_name\", fstype!~\"rootfs|selinuxfs|autofs|rpc_pipefs|tmpfs|shm|overlay|squashfs\"})*100",
+                            "expr": "avg by (node_name) (min(node_filesystem_free_bytes{node_name=~\"$node_name\", fstype!~\"rootfs|selinuxfs|autofs|rpc_pipefs|tmpfs|shm|overlay|squashfs\"}/node_filesystem_size_bytes{node_name=~\"$node_name\", fstype!~\"rootfs|selinuxfs|autofs|rpc_pipefs|tmpfs|shm|overlay|squashfs\"})*100 or \n(100 - azure_storage_percent_average{node_name=~\"$node_name\"}))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
+                            "legendFormat": "",
                             "refId": "A"
                         }
                     ],
@@ -3082,9 +3203,14 @@
                 },
                 {
                     "cacheTimeout": null,
-                    "content": "<h5><b><font color=#e68a00><center><a href=\"/graph/d/node-instance-summary/node-summary?var-node_name=$node_name\" target=\"_blank\">$crop_host...</a></center></font></b></h5>",
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {}
+                        },
+                        "overrides": []
+                    },
                     "gridPos": {
                         "h": 2,
                         "w": 3,
@@ -3093,8 +3219,11 @@
                     },
                     "id": 387,
                     "links": [],
-                    "mode": "html",
-                    "options": {},
+                    "options": {
+                        "content": "<h5 style='color:#e68a00;font-weight:bold;text-align:center'><a href=\"/graph/d/node-instance-summary/node-summary?var-node_name=$node_name\" target=\"_blank\">$crop_host...</a></h5>",
+                        "mode": "html"
+                    },
+                    "pluginVersion": "7.3.7",
                     "targets": [
                         {
                             "calculatedInterval": "10m",
@@ -3119,18 +3248,26 @@
                         "idle": "#806EB7",
                         "iowait": "#E24D42",
                         "nice": "#1F78C1",
-                        "softirq": "#806EB7",
-                        "steal": "dark-blue",
+                        "softirq": "#FFF899",
+                        "steal": "#8F3BB8",
                         "system": "#EAB839",
                         "user": "#508642"
                     },
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
+                    "description": "The CPU time is measured in clock ticks or seconds. It is useful to measure CPU time as a percentage of the CPU's capacity, which is called the CPU usage.",
                     "editable": true,
                     "error": false,
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {},
+                            "links": []
+                        },
+                        "overrides": []
+                    },
                     "fill": 6,
                     "fillGradient": 0,
                     "grid": {},
@@ -3141,6 +3278,7 @@
                         "y": 52
                     },
                     "height": "",
+                    "hiddenSeries": false,
                     "id": 337,
                     "legend": {
                         "alignAsTable": true,
@@ -3162,10 +3300,11 @@
                     "links": [],
                     "nullPointMode": "null",
                     "options": {
-                        "dataLinks": []
+                        "alertThreshold": true
                     },
                     "paceLength": 10,
                     "percentage": false,
+                    "pluginVersion": "7.3.7",
                     "pointradius": 5,
                     "points": false,
                     "renderer": "flot",
@@ -3183,7 +3322,7 @@
                     "steppedLine": true,
                     "targets": [
                         {
-                            "expr": "clamp_max(((avg by (mode) ( (clamp_max(rate(node_cpu_seconds_total{node_name=~\"$node_name\",mode!=\"idle\"}[$interval]),1)) or (clamp_max(irate(node_cpu_seconds_total{node_name=~\"$node_name\",mode!=\"idle\"}[5m]),1)) ))*100 or (avg_over_time(node_cpu_average{node_name=~\"$node_name\", mode!=\"total\", mode!=\"idle\"}[$interval]) or avg_over_time(node_cpu_average{node_name=~\"$node_name\", mode!=\"total\", mode!=\"idle\"}[5m]))),100)",
+                            "expr": "avg by (node_name,mode) (clamp_max(((avg by (mode) ( (clamp_max(rate(node_cpu_seconds_total{node_name=~\"$node_name\",mode!=\"idle\"}[$interval]),1)) or (clamp_max(irate(node_cpu_seconds_total{node_name=~\"$node_name\",mode!=\"idle\"}[5m]),1)) ))*100 or (avg_over_time(node_cpu_average{node_name=~\"$node_name\", mode!=\"total\", mode!=\"idle\"}[$interval]) or avg_over_time(node_cpu_average{node_name=~\"$node_name\", mode!=\"total\", mode!=\"idle\"}[5m]))),100))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3208,7 +3347,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -3256,10 +3395,18 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
+                    "description": "When a system is running with maximum CPU utilization, the transmitting and receiving threads must all share the available CPU. This will cause data to be queued more frequently to cope with the lack of CPU. CPU Saturation may be measured as the length of a wait queue, or the time spent waiting on the queue.",
                     "editable": true,
                     "error": false,
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {},
+                            "links": []
+                        },
+                        "overrides": []
+                    },
                     "fill": 2,
                     "fillGradient": 0,
                     "grid": {},
@@ -3269,6 +3416,7 @@
                         "x": 12,
                         "y": 52
                     },
+                    "hiddenSeries": false,
                     "id": 339,
                     "legend": {
                         "alignAsTable": true,
@@ -3289,10 +3437,11 @@
                     "links": [],
                     "nullPointMode": "null",
                     "options": {
-                        "dataLinks": []
+                        "alertThreshold": true
                     },
                     "paceLength": 10,
                     "percentage": false,
+                    "pluginVersion": "7.3.7",
                     "pointradius": 5,
                     "points": false,
                     "renderer": "flot",
@@ -3313,7 +3462,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "(avg_over_time(node_procs_running{node_name=~\"$node_name\"}[$interval])-1) / scalar(count(node_cpu_seconds_total{mode=\"user\", node_name=~\"$node_name\"})) or (avg_over_time(node_procs_running{node_name=~\"$node_name\"}[5m])-1) / scalar(count(node_cpu_seconds_total{mode=\"user\", node_name=~\"$node_name\"}))",
+                            "expr": "avg by (node_name) ((avg_over_time(node_procs_running{node_name=~\"$node_name\"}[$interval])-1) / scalar(count(node_cpu_seconds_total{mode=\"user\", node_name=~\"$node_name\"})) or (avg_over_time(node_procs_running{node_name=~\"$node_name\"}[5m])-1) / scalar(count(node_cpu_seconds_total{mode=\"user\", node_name=~\"$node_name\"})))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -3347,7 +3496,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -3391,10 +3540,18 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
+                    "description": "Disk I/O includes read or write or input/output operations involving a physical disk. It is the speed with which the data transfer takes place between the hard disk drive and RAM.\n\nSwap Activity is memory management that involves swapping sections of memory to and from physical storage.",
                     "editable": true,
                     "error": false,
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {},
+                            "links": []
+                        },
+                        "overrides": []
+                    },
                     "fill": 2,
                     "fillGradient": 0,
                     "grid": {},
@@ -3404,6 +3561,7 @@
                         "x": 0,
                         "y": 60
                     },
+                    "hiddenSeries": false,
                     "id": 341,
                     "legend": {
                         "alignAsTable": true,
@@ -3430,9 +3588,10 @@
                     ],
                     "nullPointMode": "null",
                     "options": {
-                        "dataLinks": []
+                        "alertThreshold": true
                     },
                     "percentage": false,
+                    "pluginVersion": "7.3.7",
                     "pointradius": 5,
                     "points": false,
                     "renderer": "flot",
@@ -3459,7 +3618,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "rate(node_vmstat_pgpgin{node_name=\"$node_name\"}[$interval]) * 1024 or irate(node_vmstat_pgpgin{node_name=\"$node_name\"}[5m]) * 1024",
+                            "expr": "avg by (node_name) (rate(node_vmstat_pgpgin{node_name=\"$node_name\"}[$interval]) * 1024 or irate(node_vmstat_pgpgin{node_name=\"$node_name\"}[5m]) * 1024)",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3473,7 +3632,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "(rate(node_vmstat_pgpgout{node_name=\"$node_name\"}[$interval]) * 1024 or irate(node_vmstat_pgpgout{node_name=\"$node_name\"}[5m]) * 1024)",
+                            "expr": "avg by (node_name) ((rate(node_vmstat_pgpgout{node_name=\"$node_name\"}[$interval]) * 1024 or irate(node_vmstat_pgpgout{node_name=\"$node_name\"}[5m]) * 1024))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3484,7 +3643,7 @@
                             "target": ""
                         },
                         {
-                            "expr": "(rate(node_vmstat_pgpgin{node_name=\"$node_name\"}[$interval]) * 1024 or irate(node_vmstat_pgpgin{node_name=\"$node_name\"}[5m]) * 1024 ) + (rate(node_vmstat_pgpgout{node_name=\"$node_name\"}[$interval]) * 1024 or irate(node_vmstat_pgpgout{node_name=\"$node_name\"}[5m]) * 1024)",
+                            "expr": "avg by (node_name) ((rate(node_vmstat_pgpgin{node_name=\"$node_name\"}[$interval]) * 1024 or irate(node_vmstat_pgpgin{node_name=\"$node_name\"}[5m]) * 1024 ) + (rate(node_vmstat_pgpgout{node_name=\"$node_name\"}[$interval]) * 1024 or irate(node_vmstat_pgpgout{node_name=\"$node_name\"}[5m]) * 1024))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3492,7 +3651,7 @@
                             "refId": "C"
                         },
                         {
-                            "expr": "rate(node_vmstat_pswpin{node_name=\"$node_name\"}[$interval]) * 4096 or irate(node_vmstat_pswpin{node_name=\"$node_name\"}[5m]) * 4096",
+                            "expr": "avg by (node_name) (rate(node_vmstat_pswpin{node_name=\"$node_name\"}[$interval]) * 4096 or irate(node_vmstat_pswpin{node_name=\"$node_name\"}[5m]) * 4096)",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3500,7 +3659,7 @@
                             "refId": "D"
                         },
                         {
-                            "expr": "rate(node_vmstat_pswpout{node_name=\"$node_name\"}[$interval]) * 4096 or irate(node_vmstat_pswpout{node_name=\"$node_name\"}[5m]) * 4096",
+                            "expr": "avg by (node_name) (rate(node_vmstat_pswpout{node_name=\"$node_name\"}[$interval]) * 4096 or irate(node_vmstat_pswpout{node_name=\"$node_name\"}[5m]) * 4096)",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3516,7 +3675,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -3555,10 +3714,18 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
+                    "description": "Network traffic refers to the amount of data moving across a network at a given point in time.",
                     "editable": true,
                     "error": false,
+                    "fieldConfig": {
+                        "defaults": {
+                            "custom": {},
+                            "links": []
+                        },
+                        "overrides": []
+                    },
                     "fill": 2,
                     "fillGradient": 0,
                     "grid": {},
@@ -3568,6 +3735,7 @@
                         "x": 12,
                         "y": 60
                     },
+                    "hiddenSeries": false,
                     "id": 343,
                     "legend": {
                         "alignAsTable": true,
@@ -3588,9 +3756,10 @@
                     "links": [],
                     "nullPointMode": "null",
                     "options": {
-                        "dataLinks": []
+                        "alertThreshold": true
                     },
                     "percentage": false,
+                    "pluginVersion": "7.3.7",
                     "pointradius": 5,
                     "points": false,
                     "renderer": "flot",
@@ -3608,7 +3777,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "sum(rate(node_network_receive_bytes_total{node_name=\"$node_name\", device!=\"lo\"}[$interval])) or sum(irate(node_network_receive_bytes_total{node_name=\"$node_name\", device!=\"lo\"}[5m])) or sum(max_over_time(rdsosmetrics_network_rx{node_name=\"$node_name\"}[$interval])) or sum(max_over_time(rdsosmetrics_network_rx{node_name=\"$node_name\"}[5m])) ",
+                            "expr": "avg by (node_name) (sum(rate(node_network_receive_bytes_total{node_name=\"$node_name\", device!=\"lo\"}[$interval])) or sum(irate(node_network_receive_bytes_total{node_name=\"$node_name\", device!=\"lo\"}[5m])) or sum(max_over_time(rdsosmetrics_network_rx{node_name=\"$node_name\"}[$interval])) or sum(max_over_time(rdsosmetrics_network_rx{node_name=\"$node_name\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3622,7 +3791,7 @@
                             "calculatedInterval": "2s",
                             "datasourceErrors": {},
                             "errors": {},
-                            "expr": "sum(rate(node_network_transmit_bytes_total{node_name=\"$node_name\", device!=\"lo\"}[$interval])) or sum(irate(node_network_transmit_bytes_total{node_name=\"$node_name\", device!=\"lo\"}[5m])) or\nsum(max_over_time(rdsosmetrics_network_tx{node_name=\"$node_name\"}[$interval])) or sum(max_over_time(rdsosmetrics_network_tx{node_name=\"$node_name\"}[5m]))",
+                            "expr": "avg by (node_name) (sum(rate(node_network_transmit_bytes_total{node_name=\"$node_name\", device!=\"lo\"}[$interval])) or sum(irate(node_network_transmit_bytes_total{node_name=\"$node_name\", device!=\"lo\"}[5m])) or\nsum(max_over_time(rdsosmetrics_network_tx{node_name=\"$node_name\"}[$interval])) or sum(max_over_time(rdsosmetrics_network_tx{node_name=\"$node_name\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -3641,7 +3810,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -3676,12 +3845,13 @@
                     }
                 }
             ],
-            "title": "Node Summary",
+            "repeat": "node_name",
+            "title": "Node Summary - $node_name",
             "type": "row"
         }
     ],
     "refresh": "1m",
-    "schemaVersion": 20,
+    "schemaVersion": 26,
     "style": "dark",
     "tags": [
         "MySQL",
@@ -3695,7 +3865,8 @@
                 "auto_count": 200,
                 "auto_min": "1s",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
+                "error": null,
                 "hide": 0,
                 "includeAll": false,
                 "label": "Interval",
@@ -3753,21 +3924,22 @@
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values(mysql_up, node_name)",
-                "hide": 0,
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_up{service_name=~\"$service_name\"}, node_name)",
+                "error": null,
+                "hide": 2,
                 "includeAll": false,
                 "label": "Node Name",
                 "multi": false,
                 "multiFormat": "regex values",
                 "name": "node_name",
                 "options": [],
-                "query": "label_values(mysql_up, node_name)",
+                "query": "label_values(mysql_up{service_name=~\"$service_name\"}, node_name)",
                 "refresh": 2,
                 "refresh_on_load": false,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": null,
                 "tags": [],
                 "tagsQuery": null,
@@ -3777,19 +3949,20 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values(mysql_up{node_name=~\"$node_name\"}, service_name)",
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_info_schema_table_version, service_name)",
+                "error": null,
                 "hide": 0,
                 "includeAll": true,
                 "label": "Service Name",
                 "multi": true,
                 "name": "service_name",
                 "options": [],
-                "query": "label_values(mysql_up{node_name=~\"$node_name\"}, service_name)",
+                "query": "label_values(mysql_info_schema_table_version, service_name)",
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -3799,19 +3972,20 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values(mysql_version_info{service_name=~\"$service_name\"},version)",
+                "datasource": "Metrics",
+                "definition": "query_result(mysql_version_info{service_name=~\"$service_name\"})",
+                "error": null,
                 "hide": 2,
                 "includeAll": false,
-                "label": "Version",
+                "label": null,
                 "multi": false,
                 "name": "version",
                 "options": [],
-                "query": "label_values(mysql_version_info{service_name=~\"$service_name\"},version)",
+                "query": "query_result(mysql_version_info{service_name=~\"$service_name\"})",
                 "refresh": 2,
-                "regex": "",
+                "regex": "/(([0-9\\.]+)\\.([0-9\\.]+)\\.([0-9\\.]+)-?([0-9?]+))/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -3821,8 +3995,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(mysql_up{service_name=~\"$service_name\"}, service_name)",
+                "error": null,
                 "hide": 2,
                 "includeAll": false,
                 "label": "Service Name",
@@ -3833,7 +4008,7 @@
                 "refresh": 2,
                 "regex": "/(.?.?.?.?.?.?.?.?.?.?.?.?.?).*/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -3844,8 +4019,9 @@
                 "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(mysql_up{node_name=\"$node_name\"},node_name)",
+                "error": null,
                 "hide": 2,
                 "includeAll": false,
                 "label": "Crop Node Name",
@@ -3858,7 +4034,7 @@
                 "refresh_on_load": false,
                 "regex": "/(.?.?.?.?.?.?.?.?.?.?.?.?.?).*/",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": null,
                 "tags": [],
                 "tagsQuery": null,
@@ -3866,10 +4042,11 @@
                 "useTags": false
             },
             {
-                "allValue": null,
+                "allValue": ".*",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Environment",
@@ -3880,7 +4057,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -3890,8 +4067,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, cluster)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Cluster",
@@ -3902,7 +4080,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -3912,8 +4090,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Replication Set",
@@ -3924,7 +4103,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -3934,8 +4113,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Database",
@@ -3943,10 +4123,10 @@
                 "name": "database",
                 "options": [],
                 "query": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -3956,8 +4136,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Type",
@@ -3965,10 +4146,10 @@
                 "name": "node_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -3978,8 +4159,9 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
+                "error": null,
                 "hide": 2,
                 "includeAll": true,
                 "label": "Type",
@@ -3987,10 +4169,56 @@
                 "name": "service_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "error": null,
+                "hide": 2,
+                "includeAll": true,
+                "label": "Username",
+                "multi": true,
+                "name": "username",
+                "options": [],
+                "query": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "error": null,
+                "hide": 2,
+                "includeAll": true,
+                "label": "Schema",
+                "multi": true,
+                "name": "schema",
+                "options": [],
+                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",

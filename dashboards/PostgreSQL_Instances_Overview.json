@@ -8,6 +8,7 @@
                 "hide": false,
                 "iconColor": "#e0752d",
                 "limit": 100,
+                "matchAny": true,
                 "name": "PMM Annotations",
                 "showIn": 0,
                 "tags": [
@@ -36,7 +37,7 @@
     "gnetId": 3300,
     "graphTooltip": 1,
     "id": null,
-    "iteration": 1574882322721,
+    "iteration": 1580986582551,
     "links": [
         {
             "icon": "doc",
@@ -98,7 +99,7 @@
         },
         {
             "asDropdown": true,
-            "includeVars": true,
+            "includeVars": false,
             "keepTime": true,
             "tags": [
                 "PMM"
@@ -160,7 +161,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "Number of monitored services",
             "format": "short",
@@ -245,7 +246,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "",
             "format": "short",
@@ -335,7 +336,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "The setting wal_buffers defines how much memory is used for caching the write-ahead log entries. Generally this value is small (3% of shared_buffers value), but it may need to be modified for heavily loaded servers.",
             "format": "bytes",
@@ -429,7 +430,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "The parameter work_mem defines the amount of memory assigned for internal sort operations and hash tables before writing to temporary disk files.  The default is 4MB.",
             "format": "bytes",
@@ -519,7 +520,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "Defines the amount of memory the database server uses for shared memory buffers.  Default is 128MB.  Guidance on tuning is 25% of RAM, but generally doesn't exceed 40%.",
             "format": "bytes",
@@ -609,7 +610,7 @@
                 "rgba(237, 129, 40, 0.89)",
                 "#299c46"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "description": "Whether autovacuum process is enabled or not.  Generally the solution is to vacuum more often, not less.",
             "format": "percentunit",
             "gauge": {
@@ -664,7 +665,9 @@
                 "fillColor": "rgba(31, 118, 189, 0.18)",
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
-                "show": true
+                "show": true,
+                "ymax": 1,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
@@ -701,7 +704,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 0,
                     "fill": 2,
                     "fillGradient": 0,
@@ -711,6 +714,7 @@
                         "x": 0,
                         "y": 6
                     },
+                    "hiddenSeries": false,
                     "id": 23,
                     "legend": {
                         "alignAsTable": true,
@@ -783,7 +787,7 @@
                     "title": "Top 5 PostgreSQL Connections",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -874,7 +878,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -887,7 +891,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -896,7 +900,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "sum by (service_name) (max_over_time(pg_stat_activity_count{service_name=~\"$service_name\",state=~'idle'}[$interval]) or \nmax_over_time(pg_stat_activity_count{service_name=~\"$service_name\",state='idle'}[5m])) / on (service_name)\n(max_over_time(pg_settings_max_connections{service_name=~\"$service_name\"}[$interval]) or \nmax_over_time(pg_settings_max_connections{service_name=~\"$service_name\"}[5m]))",
+                            "expr": "sum by (service_name) (avg by (service_name) (max_over_time(pg_stat_activity_count{service_name=~\"$service_name\",state=~'idle'}[$interval]) or \nmax_over_time(pg_stat_activity_count{service_name=~\"$service_name\",state='idle'}[5m]))) / on (service_name)\navg by (service_name) ((max_over_time(pg_settings_max_connections{service_name=~\"$service_name\"}[$interval]) or \nmax_over_time(pg_settings_max_connections{service_name=~\"$service_name\"}[5m])))",
                             "interval": "$interval",
                             "legendFormat": "{{service_name}}",
                             "refId": "B"
@@ -914,7 +918,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 0,
                     "fill": 2,
                     "fillGradient": 0,
@@ -924,6 +928,7 @@
                         "x": 0,
                         "y": 14
                     },
+                    "hiddenSeries": false,
                     "id": 34,
                     "legend": {
                         "alignAsTable": true,
@@ -992,7 +997,7 @@
                     "title": "Top 5 Active Connections",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -1083,7 +1088,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -1096,7 +1101,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -1121,7 +1126,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "sum by (service_name) (max_over_time(pg_stat_activity_count{service_name=~\"$service_name\",state='active'}[$interval]) or max_over_time(pg_stat_activity_count{service_name=~\"$service_name\",state='active'}[5m])) / on (service_name)(max_over_time(pg_settings_max_connections{service_name=~\"$service_name\"}[$interval]) or max_over_time(pg_settings_max_connections{service_name=~\"$service_name\"}[5m]))",
+                            "expr": "sum by (service_name) (avg by (service_name) (max_over_time(pg_stat_activity_count{service_name=~\"$service_name\",state='active',datname!~\"template.*|postgres\"}[$interval]) or max_over_time(pg_stat_activity_count{service_name=~\"$service_name\",state='active',datname!~\"template.*|postgres\"}[5m]))) / on (service_name) avg by (service_name) ((max_over_time(pg_settings_max_connections{service_name=~\"$service_name\"}[$interval]) or max_over_time(pg_settings_max_connections{service_name=~\"$service_name\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1157,7 +1162,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 23
+                        "y": 7
                     },
                     "id": 120,
                     "links": [],
@@ -1215,13 +1220,13 @@
                             "dateFormat": "YYYY-MM-DD HH:mm:ss",
                             "decimals": 2,
                             "mappingType": 1,
-                            "pattern": "/agent.*|.*_id|node.*|instance|job|service_type/",
+                            "pattern": "/agent.*|.*_id|node.*|instance|job|service_type|cluster|environment|replication_set|server/",
                             "thresholds": [],
                             "type": "hidden",
                             "unit": "short"
                         },
                         {
-                            "alias": "",
+                            "alias": "Service Name",
                             "colorMode": null,
                             "colors": [
                                 "rgba(245, 54, 54, 0.9)",
@@ -1268,7 +1273,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 23
+                        "y": 7
                     },
                     "id": 116,
                     "links": [],
@@ -1313,7 +1318,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -1326,7 +1331,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -1346,7 +1351,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "max_over_time(pg_settings_autovacuum{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(pg_settings_autovacuum{service_name=~\"$service_name\"}[5m])",
+                            "expr": "avg by (service_name) (max_over_time(pg_settings_autovacuum{service_name=~\"$service_name\"}[$interval]) or\nmax_over_time(pg_settings_autovacuum{service_name=~\"$service_name\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -1386,7 +1391,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -1471,7 +1476,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -1556,7 +1561,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -1641,7 +1646,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -1726,7 +1731,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -1811,7 +1816,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -1903,7 +1908,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -1911,8 +1916,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 27
+                        "y": 11
                     },
+                    "hiddenSeries": false,
                     "id": 36,
                     "legend": {
                         "alignAsTable": true,
@@ -1981,7 +1987,7 @@
                     "title": "Top 5 Fetched Tuples Rate",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2027,7 +2033,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 27
+                        "y": 11
                     },
                     "id": 128,
                     "links": [],
@@ -2072,7 +2078,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -2085,7 +2091,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -2112,7 +2118,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -2120,8 +2126,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 35
+                        "y": 19
                     },
+                    "hiddenSeries": false,
                     "id": 127,
                     "legend": {
                         "alignAsTable": true,
@@ -2190,7 +2197,7 @@
                     "title": "Top 5 Returned Tuples Rate",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2236,7 +2243,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 35
+                        "y": 19
                     },
                     "id": 135,
                     "links": [],
@@ -2281,7 +2288,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -2294,7 +2301,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -2321,7 +2328,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -2329,8 +2336,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 43
+                        "y": 27
                     },
+                    "hiddenSeries": false,
                     "id": 129,
                     "legend": {
                         "alignAsTable": true,
@@ -2399,7 +2407,7 @@
                     "title": "Top 5 Inserted Tuples Rate",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2445,7 +2453,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 43
+                        "y": 27
                     },
                     "id": 134,
                     "links": [],
@@ -2490,7 +2498,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -2503,7 +2511,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -2530,7 +2538,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -2538,8 +2546,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 51
+                        "y": 35
                     },
+                    "hiddenSeries": false,
                     "id": 130,
                     "legend": {
                         "alignAsTable": true,
@@ -2608,7 +2617,7 @@
                     "title": "Top 5 Updated Tuples Rate",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2654,7 +2663,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 51
+                        "y": 35
                     },
                     "id": 133,
                     "links": [],
@@ -2699,7 +2708,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -2712,7 +2721,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -2739,7 +2748,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -2747,8 +2756,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 59
+                        "y": 43
                     },
+                    "hiddenSeries": false,
                     "id": 131,
                     "legend": {
                         "alignAsTable": true,
@@ -2817,7 +2827,7 @@
                     "title": "Top 5 Deleted Tuples Rate",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -2863,7 +2873,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 59
+                        "y": 43
                     },
                     "id": 132,
                     "links": [],
@@ -2908,7 +2918,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -2921,7 +2931,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -2971,7 +2981,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -3035,7 +3045,7 @@
                 }
             ],
             "thresholds": "",
-            "title": "Total  Transactions",
+            "title": "Total Transactions",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -3056,7 +3066,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -3120,7 +3130,7 @@
                 }
             ],
             "thresholds": "",
-            "title": "Max Commits  Transactions",
+            "title": "Max Commits Transactions",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -3141,7 +3151,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -3205,7 +3215,7 @@
                 }
             ],
             "thresholds": "",
-            "title": "Max Rollback  Transactions",
+            "title": "Max Rollback Transactions",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -3226,7 +3236,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "s",
@@ -3290,7 +3300,7 @@
                 }
             ],
             "thresholds": "",
-            "title": "Max  Transaction Duration",
+            "title": "Max Transaction Duration",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -3311,7 +3321,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "short",
@@ -3366,7 +3376,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "max(max_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"template.*\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"template.*\"}[5m]))",
+                    "expr": "max(max_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -3375,7 +3385,7 @@
                 }
             ],
             "thresholds": "",
-            "title": "Max  Number of Temp Files",
+            "title": "Max Number of Temp Files",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -3396,7 +3406,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "bytes",
@@ -3451,7 +3461,7 @@
             "tableColumn": "",
             "targets": [
                 {
-                    "expr": "max(max_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"template.*\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"template.*\"}[5m]))",
+                    "expr": "max(max_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[5m]))",
                     "format": "time_series",
                     "interval": "$interval",
                     "intervalFactor": 1,
@@ -3460,7 +3470,7 @@
                 }
             ],
             "thresholds": "",
-            "title": "Max  Size of Temp Files",
+            "title": "Max Size of Temp Files",
             "type": "singlestat",
             "valueFontSize": "50%",
             "valueMaps": [
@@ -3488,7 +3498,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -3496,8 +3506,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 71
+                        "y": 15
                     },
+                    "hiddenSeries": false,
                     "id": 26,
                     "legend": {
                         "alignAsTable": true,
@@ -3568,7 +3579,7 @@
                     "title": "Top 5 Commit Transactions",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -3614,7 +3625,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 71
+                        "y": 15
                     },
                     "id": 142,
                     "links": [],
@@ -3659,7 +3670,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -3672,7 +3683,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -3699,7 +3710,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -3707,8 +3718,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 79
+                        "y": 23
                     },
+                    "hiddenSeries": false,
                     "id": 140,
                     "legend": {
                         "alignAsTable": true,
@@ -3779,7 +3791,7 @@
                     "title": "Top 5 Rollbacks Transactions",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -3794,10 +3806,10 @@
                         {
                             "decimals": 2,
                             "format": "ops",
-                            "label": null,
+                            "label": "",
                             "logBase": 1,
                             "max": null,
-                            "min": null,
+                            "min": "0",
                             "show": true
                         },
                         {
@@ -3825,7 +3837,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 79
+                        "y": 23
                     },
                     "id": 143,
                     "links": [],
@@ -3870,7 +3882,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -3883,7 +3895,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -3910,7 +3922,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -3918,8 +3930,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 87
+                        "y": 31
                     },
+                    "hiddenSeries": false,
                     "id": 18,
                     "legend": {
                         "alignAsTable": true,
@@ -3990,7 +4003,7 @@
                     "title": "Top 5 Duration of Active Transactions",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -4036,7 +4049,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 87
+                        "y": 31
                     },
                     "id": 144,
                     "links": [],
@@ -4081,7 +4094,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -4094,7 +4107,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -4121,7 +4134,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -4129,8 +4142,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 95
+                        "y": 39
                     },
+                    "hiddenSeries": false,
                     "id": 141,
                     "legend": {
                         "alignAsTable": true,
@@ -4201,7 +4215,7 @@
                     "title": "Top 5 Duration of Other Transactions",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -4247,7 +4261,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 95
+                        "y": 39
                     },
                     "id": 145,
                     "links": [],
@@ -4292,7 +4306,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -4305,7 +4319,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -4347,7 +4361,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 0,
                     "fill": 1,
                     "fillGradient": 0,
@@ -4355,8 +4369,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 104
+                        "y": 16
                     },
+                    "hiddenSeries": false,
                     "id": 48,
                     "legend": {
                         "alignAsTable": true,
@@ -4402,7 +4417,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(sum by (service_name) (max_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"template.*\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"template.*\"}[5m]))))",
+                            "expr": "topk(5,(sum by (service_name) (max_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[5m]))))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -4410,7 +4425,7 @@
                             "refId": "A"
                         },
                         {
-                            "expr": "avg(sum by (service_name) (max_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"template.*\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"template.*\"}[5m])))",
+                            "expr": "avg(sum by (service_name) (max_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -4425,7 +4440,7 @@
                     "title": "Top 5 Number of Temp Files",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -4471,7 +4486,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 104
+                        "y": 16
                     },
                     "id": 160,
                     "links": [],
@@ -4516,7 +4531,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -4529,7 +4544,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -4538,7 +4553,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "sum by (service_name) (max_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"template.*\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"template.*\"}[5m]))",
+                            "expr": "sum by (service_name) (max_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_files{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -4556,7 +4571,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 1,
                     "fillGradient": 0,
@@ -4564,8 +4579,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 112
+                        "y": 24
                     },
+                    "hiddenSeries": false,
                     "id": 49,
                     "legend": {
                         "alignAsTable": true,
@@ -4611,7 +4627,7 @@
                     "steppedLine": false,
                     "targets": [
                         {
-                            "expr": "topk(5,(sum by (service_name) (max_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"template.*\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"template.*\"}[5m]))))",
+                            "expr": "topk(5,(sum by (service_name) (max_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[5m]))))",
                             "format": "time_series",
                             "hide": false,
                             "interval": "$interval",
@@ -4620,7 +4636,7 @@
                             "refId": "A"
                         },
                         {
-                            "expr": "avg(sum by (service_name) (max_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"template.*\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"template.*\"}[5m])))",
+                            "expr": "avg(sum by (service_name) (max_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[5m])))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -4635,7 +4651,7 @@
                     "title": "Top 5 Size of Temp Files",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -4681,7 +4697,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 112
+                        "y": 24
                     },
                     "id": 161,
                     "links": [],
@@ -4726,7 +4742,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -4739,7 +4755,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -4748,7 +4764,7 @@
                     ],
                     "targets": [
                         {
-                            "expr": "sum by (service_name) (max_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"template.*\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"template.*\"}[5m]))",
+                            "expr": "sum by (service_name) (max_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[$interval]) or \nmax_over_time(pg_stat_database_temp_bytes{service_name=~\"$service_name\",datname!~\"|template(0|1)\"}[5m]))",
                             "format": "time_series",
                             "interval": "$interval",
                             "intervalFactor": 1,
@@ -4788,7 +4804,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "short",
@@ -4873,7 +4889,7 @@
                 "#FA6400",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "short",
@@ -4958,7 +4974,7 @@
                 "#FA6400",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "short",
@@ -5043,7 +5059,7 @@
                 "#FA6400",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "percentunit",
@@ -5093,7 +5109,9 @@
                 "fillColor": "rgba(31, 118, 189, 0.18)",
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
-                "show": true
+                "show": true,
+                "ymax": 1,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
@@ -5128,7 +5146,7 @@
                 "#C4162A",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "percentunit",
@@ -5178,7 +5196,9 @@
                 "fillColor": "rgba(31, 118, 189, 0.18)",
                 "full": false,
                 "lineColor": "rgb(31, 120, 193)",
-                "show": true
+                "show": true,
+                "ymax": 1,
+                "ymin": 0
             },
             "tableColumn": "",
             "targets": [
@@ -5213,7 +5233,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "short",
@@ -5305,7 +5325,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -5316,8 +5336,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 124
+                        "y": 20
                     },
+                    "hiddenSeries": false,
                     "id": 61,
                     "legend": {
                         "alignAsTable": true,
@@ -5432,7 +5453,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -5478,7 +5499,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 124
+                        "y": 20
                     },
                     "id": 164,
                     "links": [],
@@ -5523,7 +5544,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -5536,7 +5557,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -5563,7 +5584,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -5574,8 +5595,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 132
+                        "y": 28
                     },
+                    "hiddenSeries": false,
                     "id": 3,
                     "legend": {
                         "alignAsTable": true,
@@ -5690,7 +5712,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -5736,7 +5758,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 132
+                        "y": 28
                     },
                     "id": 166,
                     "links": [],
@@ -5781,7 +5803,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -5794,7 +5816,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -5837,7 +5859,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -5848,8 +5870,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 140
+                        "y": 36
                     },
+                    "hiddenSeries": false,
                     "id": 163,
                     "legend": {
                         "alignAsTable": true,
@@ -5965,7 +5988,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -6011,7 +6034,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 140
+                        "y": 36
                     },
                     "id": 165,
                     "links": [],
@@ -6056,7 +6079,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -6069,7 +6092,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -6127,7 +6150,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -6138,8 +6161,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 149
+                        "y": 21
                     },
+                    "hiddenSeries": false,
                     "id": 14,
                     "legend": {
                         "alignAsTable": true,
@@ -6211,7 +6235,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -6256,7 +6280,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 149
+                        "y": 21
                     },
                     "id": 167,
                     "links": [],
@@ -6301,7 +6325,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -6314,7 +6338,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -6372,7 +6396,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "description": "Based on pg_stat_database_conflicts view",
                     "fill": 2,
@@ -6381,8 +6405,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 158
+                        "y": 22
                     },
+                    "hiddenSeries": false,
                     "id": 28,
                     "legend": {
                         "alignAsTable": true,
@@ -6453,7 +6478,7 @@
                     "title": "Top 5 Canceled Queries",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -6499,7 +6524,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 158
+                        "y": 22
                     },
                     "id": 168,
                     "links": [],
@@ -6544,7 +6569,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -6557,7 +6582,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [
@@ -6622,7 +6647,7 @@
                 "#8F3BB8",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "ops",
@@ -6707,7 +6732,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "wps",
@@ -6792,7 +6817,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "rps",
@@ -6877,7 +6902,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 2,
             "description": "",
             "format": "short",
@@ -6962,7 +6987,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "",
             "format": "short",
@@ -7047,7 +7072,7 @@
                 "#1F60C4",
                 "#d44a3a"
             ],
-            "datasource": "Prometheus",
+            "datasource": null,
             "decimals": 0,
             "description": "",
             "format": "short",
@@ -7139,7 +7164,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -7147,8 +7172,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 170
+                        "y": 26
                     },
+                    "hiddenSeries": false,
                     "id": 50,
                     "legend": {
                         "alignAsTable": true,
@@ -7217,7 +7243,7 @@
                     "title": "Top 5 Read Operations with Blocks",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -7264,7 +7290,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 170
+                        "y": 26
                     },
                     "id": 170,
                     "links": [],
@@ -7309,7 +7335,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -7322,7 +7348,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -7349,7 +7375,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -7357,8 +7383,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 178
+                        "y": 34
                     },
+                    "hiddenSeries": false,
                     "id": 169,
                     "legend": {
                         "alignAsTable": true,
@@ -7427,7 +7454,7 @@
                     "title": "Top 5 Write Operations with Blocks",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -7474,7 +7501,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 178
+                        "y": 34
                     },
                     "id": 171,
                     "links": [],
@@ -7519,7 +7546,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -7532,7 +7559,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -7574,7 +7601,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -7585,8 +7612,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 187
+                        "y": 27
                     },
+                    "hiddenSeries": false,
                     "id": 176,
                     "legend": {
                         "alignAsTable": true,
@@ -7703,7 +7731,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -7749,7 +7777,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 187
+                        "y": 27
                     },
                     "id": 178,
                     "links": [],
@@ -7794,7 +7822,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -7807,7 +7835,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -7834,7 +7862,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -7845,8 +7873,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 195
+                        "y": 35
                     },
+                    "hiddenSeries": false,
                     "id": 177,
                     "legend": {
                         "alignAsTable": true,
@@ -7963,7 +7992,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -8009,7 +8038,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 195
+                        "y": 35
                     },
                     "id": 179,
                     "interval": "",
@@ -8055,7 +8084,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -8068,7 +8097,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -8095,7 +8124,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -8106,8 +8135,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 203
+                        "y": 43
                     },
+                    "hiddenSeries": false,
                     "id": 2,
                     "legend": {
                         "alignAsTable": true,
@@ -8224,7 +8254,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -8270,7 +8300,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 203
+                        "y": 43
                     },
                     "id": 180,
                     "interval": "",
@@ -8316,7 +8346,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -8329,7 +8359,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -8356,7 +8386,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -8367,8 +8397,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 211
+                        "y": 51
                     },
+                    "hiddenSeries": false,
                     "id": 175,
                     "legend": {
                         "alignAsTable": true,
@@ -8485,7 +8516,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -8531,7 +8562,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 211
+                        "y": 51
                     },
                     "id": 182,
                     "interval": "",
@@ -8577,7 +8608,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -8590,7 +8621,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -8617,7 +8648,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "editable": true,
                     "error": false,
@@ -8628,8 +8659,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 219
+                        "y": 59
                     },
+                    "hiddenSeries": false,
                     "id": 174,
                     "legend": {
                         "alignAsTable": true,
@@ -8746,7 +8778,7 @@
                     "tooltip": {
                         "msResolution": false,
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "cumulative"
                     },
                     "type": "graph",
@@ -8792,7 +8824,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 219
+                        "y": 59
                     },
                     "id": 181,
                     "interval": "",
@@ -8838,7 +8870,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -8851,7 +8883,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -8893,7 +8925,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -8901,8 +8933,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 228
+                        "y": 28
                     },
+                    "hiddenSeries": false,
                     "id": 22,
                     "legend": {
                         "alignAsTable": true,
@@ -8976,7 +9009,7 @@
                     "title": "Top 5 Files Synchronization to disk",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -9022,7 +9055,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 228
+                        "y": 28
                     },
                     "id": 183,
                     "interval": "",
@@ -9068,7 +9101,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -9081,7 +9114,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -9108,7 +9141,7 @@
                     "bars": false,
                     "dashLength": 10,
                     "dashes": false,
-                    "datasource": "Prometheus",
+                    "datasource": null,
                     "decimals": 2,
                     "fill": 2,
                     "fillGradient": 0,
@@ -9116,8 +9149,9 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 236
+                        "y": 36
                     },
+                    "hiddenSeries": false,
                     "id": 184,
                     "legend": {
                         "alignAsTable": true,
@@ -9191,7 +9225,7 @@
                     "title": "Top 5 Written Files to Disk",
                     "tooltip": {
                         "shared": true,
-                        "sort": 0,
+                        "sort": 5,
                         "value_type": "individual"
                     },
                     "type": "graph",
@@ -9237,7 +9271,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 236
+                        "y": 36
                     },
                     "id": 185,
                     "interval": "",
@@ -9283,7 +9317,7 @@
                     "savedComposites": [],
                     "savedOverrides": [
                         {
-                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?var-service_name=${__cell_name}",
+                            "clickThrough": "/graph/d/postgresql-instance-summary/postgresql-instance-summary?from=$__from&to=$__to&var-service_name=${__cell_name}",
                             "colors": [
                                 "#299c46",
                                 "#e5ac0e",
@@ -9296,7 +9330,7 @@
                             "metricName": "/.*/",
                             "operatorName": "current",
                             "prefix": "",
-                            "sanitizeURLEnabled": true,
+                            "sanitizeURLEnabled": false,
                             "scaledDecimals": null,
                             "suffix": "",
                             "thresholds": [],
@@ -9324,7 +9358,7 @@
         }
     ],
     "refresh": "1m",
-    "schemaVersion": 20,
+    "schemaVersion": 21,
     "style": "dark",
     "tags": [
         "Percona",
@@ -9389,21 +9423,21 @@
                 "type": "interval"
             },
             {
-                "allValue": null,
+                "allValue": ".*",
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "",
-                "hide": 2,
-                "includeAll": false,
-                "label": null,
-                "multi": false,
-                "name": "work_mem",
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up\"}, environment)",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Environment",
+                "multi": true,
+                "name": "environment",
                 "options": [],
-                "query": "query_result(pg_settings_work_mem_bytes{service_name=~\"$service_name\"})",
+                "query": "label_values({__name__=~\"pg_up\"}, environment)",
                 "refresh": 2,
-                "regex": "/ ([0-9\\.]+)/",
+                "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9411,21 +9445,22 @@
                 "useTags": false
             },
             {
+                "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values(pg_up,node_name)",
+                "datasource": "Metrics",
+                "definition": "label_values(pg_up{environment=~\"$environment\"},node_name)",
                 "hide": 0,
                 "includeAll": true,
                 "label": "Node Name",
                 "multi": true,
                 "name": "node_name",
                 "options": [],
-                "query": "label_values(pg_up,node_name)",
+                "query": "label_values(pg_up{environment=~\"$environment\"},node_name)",
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9433,21 +9468,22 @@
                 "useTags": false
             },
             {
+                "allFormat": "glob",
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values(pg_up{node_name=~\"$node_name\"}, service_name)",
+                "datasource": "Metrics",
+                "definition": "label_values(pg_up{node_name=~\"$node_name\",environment=~\"$environment\"}, service_name)",
                 "hide": 0,
                 "includeAll": true,
                 "label": "Service Name",
                 "multi": true,
                 "name": "service_name",
                 "options": [],
-                "query": "label_values(pg_up{node_name=~\"$node_name\"}, service_name)",
+                "query": "label_values(pg_up{node_name=~\"$node_name\",environment=~\"$environment\"}, service_name)",
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9457,7 +9493,7 @@
             {
                 "allValue": ".*",
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
                 "hide": 2,
                 "includeAll": true,
@@ -9469,7 +9505,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9479,7 +9515,29 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
+                "definition": "",
+                "hide": 2,
+                "includeAll": false,
+                "label": null,
+                "multi": false,
+                "name": "work_mem",
+                "options": [],
+                "query": "query_result(pg_settings_work_mem_bytes{service_name=~\"$service_name\"})",
+                "refresh": 2,
+                "regex": "/ ([0-9\\.]+)/",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9501,7 +9559,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9513,7 +9571,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9523,7 +9581,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9535,7 +9593,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9545,7 +9603,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9557,7 +9615,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9567,7 +9625,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9579,7 +9637,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9589,7 +9647,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9601,7 +9659,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9611,7 +9669,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9623,7 +9681,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9633,7 +9691,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9645,7 +9703,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9655,7 +9713,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9667,7 +9725,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9677,7 +9735,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9689,7 +9747,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9699,7 +9757,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9711,7 +9769,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9721,7 +9779,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9733,7 +9791,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9743,7 +9801,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9755,7 +9813,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9765,7 +9823,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9777,7 +9835,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9787,7 +9845,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9799,7 +9857,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9809,7 +9867,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9821,7 +9879,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9831,7 +9889,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9843,7 +9901,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9853,7 +9911,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9865,7 +9923,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9875,7 +9933,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9887,7 +9945,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9897,7 +9955,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9909,7 +9967,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9919,7 +9977,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9931,7 +9989,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9941,7 +9999,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9953,7 +10011,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9963,7 +10021,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9975,7 +10033,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -9985,7 +10043,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -9997,7 +10055,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10007,7 +10065,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10019,7 +10077,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10029,7 +10087,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10041,7 +10099,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10051,7 +10109,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10063,7 +10121,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10073,7 +10131,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10085,7 +10143,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10095,7 +10153,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10107,7 +10165,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10117,7 +10175,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10129,7 +10187,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10139,7 +10197,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10151,7 +10209,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10161,7 +10219,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10173,7 +10231,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10183,7 +10241,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10195,7 +10253,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10205,7 +10263,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10217,7 +10275,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10227,7 +10285,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10239,7 +10297,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10249,7 +10307,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10261,7 +10319,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10271,7 +10329,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10283,7 +10341,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10293,7 +10351,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "",
                 "hide": 2,
                 "includeAll": false,
@@ -10305,7 +10363,7 @@
                 "refresh": 2,
                 "regex": "/ ([0-9\\.]+)/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10315,29 +10373,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
-                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
-                "hide": 2,
-                "includeAll": true,
-                "label": "Environment",
-                "multi": true,
-                "name": "environment",
-                "options": [],
-                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
-                "refresh": 2,
-                "regex": "",
-                "skipUrlSync": false,
-                "sort": 0,
-                "tagValuesQuery": "",
-                "tags": [],
-                "tagsQuery": "",
-                "type": "query",
-                "useTags": false
-            },
-            {
-                "allValue": null,
-                "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, cluster)",
                 "hide": 2,
                 "includeAll": true,
@@ -10349,7 +10385,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10359,7 +10395,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
                 "hide": 2,
                 "includeAll": true,
@@ -10371,7 +10407,7 @@
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10381,7 +10417,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
                 "hide": 2,
                 "includeAll": true,
@@ -10390,10 +10426,10 @@
                 "name": "node_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",
@@ -10403,7 +10439,7 @@
             {
                 "allValue": null,
                 "current": {},
-                "datasource": "Prometheus",
+                "datasource": "Metrics",
                 "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
                 "hide": 2,
                 "includeAll": true,
@@ -10412,10 +10448,55 @@
                 "name": "service_type",
                 "options": [],
                 "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
-                "refresh": 0,
+                "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "hide": 2,
+                "includeAll": true,
+                "index": -1,
+                "label": "Username",
+                "multi": true,
+                "name": "username",
+                "options": [],
+                "query": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {},
+                "datasource": "Metrics",
+                "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "hide": 2,
+                "includeAll": true,
+                "label": "Schema",
+                "multi": true,
+                "name": "schema",
+                "options": [],
+                "query": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 5,
                 "tagValuesQuery": "",
                 "tags": [],
                 "tagsQuery": "",

@@ -11,7 +11,7 @@ import datetime
 import re
 
 __version__ = '1.0.0'
-refresh_intervals = ['5s','10s','30s','1m','5m','15m','30m','1h','2h','1d']
+refresh_intervals = ['1s','5s','1m','5m','1h','6h','1d']
 year = str(datetime.date.today())[:4]
 
 def set_title(dashboard):
@@ -147,8 +147,22 @@ def add_links(dashboard):
                             'type': 'link',
                             'url': '/graph/d/node-instance-compare/nodes-compare'
                         }
+                        print "OS Compare link has been added."
                         dashboard['links'].append(add_item)
-                    elif 'MySQL' in dashboard['tags']:
+                    elif 'PXC' in dashboard['tags']:
+                        add_item = {
+                            'icon': 'bolt',
+                            'includeVars': True,
+                            'keepTime': True,
+                            'tags': [ tag ],
+                            'targetBlank': False,
+                            'title': 'Compare',
+                            'type': 'link',
+                            'url': '/graph/d/pxc-nodes-compare/pxc-galera-nodes-compare'
+                        }
+                        print "PXC Compare link has been added."
+                        dashboard['links'].append(add_item)
+                    elif 'MySQL' in dashboard['tags'] or 'MySQL_HA' in dashboard['tags']:
                         add_item = {
                             'icon': 'bolt',
                             'includeVars': True,
@@ -159,8 +173,9 @@ def add_links(dashboard):
                             'type': 'link',
                             'url': '/graph/d/mysql-instance-compare/mysql-instances-compare'
                         }
+                        print "MySQL Compare link has been added."
                         dashboard['links'].append(add_item)
-                    elif 'MongoDB' in dashboard['tags']:
+                    elif 'MongoDB' in dashboard['tags'] or 'MongoDB_HA' in dashboard['tags']:
                         add_item = {
                             'icon': 'bolt',
                             'includeVars': True,
@@ -171,6 +186,7 @@ def add_links(dashboard):
                             'type': 'link',
                             'url': '/graph/d/mongodb-instance-compare/mongodb-instances-compare'
                         }
+                        print "MongoDB Compare link has been added."
                         dashboard['links'].append(add_item)
                     elif 'PostgreSQL' in dashboard['tags']:
                         add_item = {
@@ -183,12 +199,13 @@ def add_links(dashboard):
                             'type': 'link',
                             'url': '/graph/d/postgresql-instance-compare/postgresql-instances-compare'
                         }
+                        print "PostgreSQL Compare link has been added."
                         dashboard['links'].append(add_item)
                 else:
                     if (tag in dashboard['tags'] or tag in ['Services','PMM',service_tag]) and tag not in ['Compare','Home','MySQL_HA','MongoDB_HA']:
                         add_item = {
                             'asDropdown': True,
-                            'includeVars': True if (tag not in ['Services'] or 'Query Analytics' in dashboard['tags'])  else False,
+                            'includeVars': True if ((tag not in ['Services'] and tag not in ['PMM']) or 'Query Analytics' in dashboard['tags'])  else False,
                             'keepTime': True,
                             'tags': [ tag ],
                             'targetBlank': False,
@@ -321,8 +338,6 @@ def fix_datasource(dashboard):
                 if 'datasource' in panel:
                     if panel['datasource'] == '${DS_PROMETHEUS}':
                         dashboard['panels'][panel_index]['datasource'] = 'Prometheus'
-                    if panel['datasource'] == '${DS_CLOUDWATCH}':
-                        dashboard['panels'][panel_index]['datasource'] = 'CloudWatch'
                     if panel['datasource'] == '${DS_QAN-API}':
                         dashboard['panels'][panel_index]['datasource'] = 'QAN-API'
                 if 'panels' in panel:
@@ -331,8 +346,6 @@ def fix_datasource(dashboard):
                                 if 'datasource' in panelIn:
                                     if dashboard['panels'][panel_index]['panels'][panelIn_index]['datasource'] == '${DS_PROMETHEUS}':
                                         dashboard['panels'][panel_index]['panels'][panelIn_index]['datasource'] = 'Prometheus'
-                                    if dashboard['panels'][panel_index]['panels'][panelIn_index]['datasource'] == '${DS_CLOUDWATCH}':
-                                        dashboard['panels'][panel_index]['panels'][panelIn_index]['datasource'] = 'CloudWatch'
                                     if dashboard['panels'][panel_index]['panels'][panelIn_index]['datasource'] == '${DS_QAN-API}':
                                         dashboard['panels'][panel_index]['panels'][panelIn_index]['datasource'] = 'QAN-API'
                 if 'mappingTypes' in panel:
@@ -340,8 +353,6 @@ def fix_datasource(dashboard):
                             if 'datasource' in mappingTypes:
                                 if dashboard['panels'][panel_index]['mappingTypes'][mappingTypes_index]['datasource'] == '${DS_PROMETHEUS}':
                                     dashboard['panels'][panel_index]['mappingTypes'][mappingTypes_index]['datasource'] = 'Prometheus'
-                                if dashboard['panels'][panel_index]['mappingTypes'][mappingTypes_index]['datasource'] == '${DS_CLOUDWATCH}':
-                                    dashboard['panels'][panel_index]['mappingTypes'][mappingTypes_index]['datasource'] = 'CloudWatch'
                                 if dashboard['panels'][panel_index]['mappingTypes'][mappingTypes_index]['datasource'] == '${DS_QAN-API}':
                                     dashboard['panels'][panel_index]['mappingTypes'][mappingTypes_index]['datasource'] = 'QAN-API'
 
@@ -350,8 +361,6 @@ def fix_datasource(dashboard):
                     if 'datasource' in panel.keys():
                         if panel['datasource'] == '${DS_PROMETHEUS}':
                             dashboard['templating']['list'][panel_index]['datasource'] = 'Prometheus'
-                        if panel['datasource'] == '${DS_CLOUDWATCH}':
-                            dashboard['templating']['list'][panel_index]['datasource'] = 'CloudWatch'
                         if panel['datasource'] == '${DS_QAN-API}':
                             dashboard['templating']['list'][panel_index]['datasource'] = 'QAN-API'
 
@@ -383,13 +392,18 @@ def set_hide_timepicker(dashboard):
 
 def add_annotation(dashboard):
     """Add PMM annotation."""
-    tag = "pmm_annotation"
+    TAG = "pmm_annotation"
     prompt = 'Add default PMM annotation (conventional: **Yes**) [%s]: ' % (
         "No",
     )
     user_input = raw_input(prompt)
     if user_input:
         if user_input == 'Yes':
+            active_variables = [TAG]
+            for templating in dashboard['templating']['list']:
+                if templating['type'] == 'query' and templating['hide'] == 0:
+                    active_variables.append('$' + templating['name'])
+
             for annotation in copy.deepcopy(dashboard['annotations']['list']):
                 dashboard['annotations']['list'].remove(annotation)
             add_item = {
@@ -399,9 +413,10 @@ def add_annotation(dashboard):
                 'hide': False,
                 'iconColor': "#e0752d",
                 'limit': 100,
+                'matchAny': True,
                 'name': "PMM Annotations",
                 'showIn': 0,
-                'tags': [ tag, '$host', '$service'],
+                'tags': active_variables,
                 'type': "tags"
             }
             dashboard['annotations']['list'].append(add_item)
@@ -436,7 +451,7 @@ def add_copyrights_links(dashboard):
                     'h': 1,
                     'w': 24,
                     'x': 0,
-                    'y': 99
+                    'y': 200
                 },
                 'id': 9998,
                 'panels': [],
@@ -450,7 +465,7 @@ def add_copyrights_links(dashboard):
                   'h': 3,
                   'w': 24,
                   'x': 0,
-                  'y': 99
+                  'y': 201
                 },
                 'id': 9999,
                 'links': [],
